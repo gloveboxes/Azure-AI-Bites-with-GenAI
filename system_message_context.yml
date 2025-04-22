@@ -1,17 +1,21 @@
-- title: How to get a chat completions response from
-    the service using a synchronous client and structured output
+- title: How to get a chat completions response from the service using a synchronous client and structured output
+  fence_type: python
   url: https://raw.githubusercontent.com/Azure/azure-sdk-for-python/refs/heads/main/sdk/ai/azure-ai-inference/samples/sample_chat_completions_with_structured_output.py
-- title: how to use basic agent operations with function tools from
-    the Azure Agents service
+- title: how to use basic agent operations with function tools from the Azure Agents service
+  fence_type: python
   url: https://raw.githubusercontent.com/Azure/azure-sdk-for-python/refs/heads/main/sdk/ai/azure-ai-projects/samples/agents/sample_agents_functions_with_console_tracing.py
-- title: how to use agent operations with code interpreter from
-    the Azure Agents service
+- title: how to use agent operations with code interpreter from the Azure Agents service
+  fence_type: python
   url: https://raw.githubusercontent.com/Azure/azure-sdk-for-python/refs/heads/main/sdk/ai/azure-ai-projects/samples/agents/sample_agents_code_interpreter.py
-- title: how to use agent operations with an event handler and toolset from
-    the Azure Agents service 
+- title: how to use agent operations with an event handler and toolset from the Azure Agents service 
+  fence_type: python
   url: https://raw.githubusercontent.com/Azure/azure-sdk-for-python/refs/heads/main/sdk/ai/azure-ai-projects/samples/agents/async_samples/sample_agents_stream_eventhandler_with_functions_async.py
 - title: how to add files to agent during the vector store creation
+  fence_type: python
   url: https://raw.githubusercontent.com/Azure/azure-sdk-for-python/refs/heads/main/sdk/ai/azure-ai-projects/samples/agents/sample_agents_vector_store_file_search.py
-- title: how to get a chat completions response from
-    the service using a synchronous client, with an Azure OpenAI (AOAI) endpoint.
+- title: how to get a chat completions response from the service using a synchronous client, with an Azure OpenAI (AOAI) endpoint.
+  fence_type: python
   url: https://raw.githubusercontent.com/Azure/azure-sdk-for-python/refs/heads/main/sdk/ai/azure-ai-inference/samples/sample_chat_completions_azure_openai.py
+- title: Explore the model catalog in Azure AI Foundry portal
+  fence_type: markdown
+  url: https://raw.githubusercontent.com/MicrosoftDocs/azure-ai-docs/refs/heads/main/articles/ai-foundry/how-to/model-catalog-overview.md

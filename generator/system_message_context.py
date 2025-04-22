@@ -24,6 +24,7 @@ output_file.write_text("", encoding="utf-8")
 # Fetch and append content
 for entry in entries:
     title = entry["title"]
+    fence_type = entry.get("fence_type", "python")
     url = entry["url"]
 
     try:
@@ -34,7 +35,7 @@ for entry in entries:
         print(f"Failed to fetch {url}: {e}")
         continue
 
-    section = f"## {title.strip()}\n```python\n{code.strip()}\n```\n\n"
+    section = f"## {title.strip()}\n```{fence_type}\n{code.strip()}\n```\n\n"
 
     with open(output_file, "a", encoding="utf-8") as f:
         f.write(section)

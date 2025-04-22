@@ -1,3 +1,7 @@
+- title: "Setting up model deployment in Azure AI Foundry"
+  filename: "recipe_2_getting_started_ai_foundry.md"
+  prompt: |
+    How to deploy a new gpt-4o model in Azure AI Foundry.
 - title: "Basic Chat Completion"
   filename: "recipe_3_basic_chat.md"
   prompt: |
@@ -15,3 +19,5 @@
     Generate sales by region pie chart using the Code Interpreter with this data:
       - Europe: USD 120000
       - China: USD 150000
+
+    

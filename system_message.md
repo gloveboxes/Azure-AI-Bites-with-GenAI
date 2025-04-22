@@ -42,7 +42,7 @@
 - Use *italics* for placeholders.
 - Use `code` formatting for commands, file names, and references.
 - Present steps using numbered lists.
-- Markdown links should be followed by {:target="_blank"} to open in a new tab.
+- Markdown links should be formatted as [](){:target="_blank"}.
 
 # Context
 ## Python Azure Libraries Dependencies with versions

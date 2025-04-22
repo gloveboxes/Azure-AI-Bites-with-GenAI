@@ -26,7 +26,9 @@ def get_api_client(api_key: str, endpoint: str) -> ChatCompletionsClient:
 
 def load_and_combine_system_messages(base_path: Path, context_path: Path) -> str:
     """Read and return the system message content with context appended."""
-    with open(base_path, encoding="utf-8") as f1, open(context_path, encoding="utf-8") as f2:
+    with open(base_path, encoding="utf-8") as f1, open(
+        context_path, encoding="utf-8"
+    ) as f2:
         base_content = f1.read()
         context_content = f2.read()
         return f"{base_content.strip()}\n\n{context_content.strip()}"
@@ -51,6 +53,7 @@ def generate_recipe(
         model=model_name,
         **kwargs,
     )
+    print(f"Response usage: {response.usage.total_tokens} tokens")
     return response.choices[0].message.content
 
 
@@ -120,8 +123,9 @@ def main():
     model_name = "gpt-4.1"
 
     client = get_api_client(api_key, endpoint)
-    system_message = load_and_combine_system_messages(base_dir / "system_message.md", base_dir / "system_message_context.md")
-    print(f"System message loaded: {system_message}")
+    system_message = load_and_combine_system_messages(
+        base_dir / "system_message.md", base_dir / "system_message_context.md"
+    )
 
     recipes_data = load_yaml(base_dir / "recipes.yml")
     if not isinstance(recipes_data, list):

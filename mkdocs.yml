@@ -8,7 +8,7 @@ plugins:
 - include-markdown
 theme:
   name: material
-  logo: media/favicon.png
+  # logo: media/favicon.png
   favicon: media/favicon.png
   features:
   - navigation.instant

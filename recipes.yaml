@@ -1,15 +1,15 @@
-- name: "Basic Chat Completion"
+- title: "Basic Chat Completion"
   filename: "recipe_3_basic_chat.md"
   prompt: |
     Generate basic chat completion code in Python using the Azure Inference SDK.
     Show how the SystemMessage, UserMessage and AssistantMessage are used.
-- name: "Migrate to Azure Inference Chat Completion"
+- title: "Migrate to Azure Inference Chat Completion"
   filename: "recipe_4_migrating.md"
   prompt: |
     How to migrate from OpenAI Chat Completion to an Azure Inference Chat Completion.
     Before the azure inference code example, include a table that maps parameters from OpenAI ChatCompletion API to the Azure Inference API.
     Show code examples of both OpenAI Chat Completion and Azure Inference.
-- name: "Generate an Sales by Region Pie Chart"
+- title: "Generate an Sales by Region Pie Chart"
   filename: "recipe_5_generate_image.md"
   prompt: |
     Generate sales by region pie chart using the Code Interpreter with this data:

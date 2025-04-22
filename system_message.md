@@ -12,7 +12,7 @@
   - === "Linux/macOS"
 - Add a main code components section. For each component:
   - Provide a brief explanation
-  - Show the relevant code.
+  - Show the relevant code in fenced code blocks.
 - Show complete code example and add a brief explanation.
 - How to run the example code
 - End with a 'Next steps' or 'Related resources' section.
@@ -28,7 +28,8 @@
 - Explain code inline or before it if necessary.
 
 # Instructions
-- There are code examples, and Python libraries with versions to use when generating the output.
+- When generating the output, refer to the relevant code examples in the provided context.
+- List all required Python libraries, including their specific versions.
 - Ensure only required libraries are installed.
 - Breakdown the examples into it's main components and include a brief explanation.
 

@@ -1,105 +1,176 @@
 # Deploy a New GPT-4o Model in Azure AI Foundry
 
-This guide shows you how to deploy a new GPT-4o model in Azure AI Foundry. You will use the Azure AI Foundry portal to create a deployment, making the model available for inference in your projects.
+This guide shows you how to deploy a new GPT-4o model in Azure AI Foundry. You will use the Azure AI Foundry portal to select, configure, and deploy the model for use in your applications.
 
 ## Prerequisites
 
-- Access to an [Azure AI Foundry](https://ai.azure.com){:target="_blank"} workspace with **Project Contributor** or higher permissions.
-- An active Azure subscription.
-- The GPT-4o model available in your region and project.
-- Python 3.8+ and Azure AI Foundry services (for code-based deployment or testing).
+- An Azure subscription with access to Azure AI Foundry.
+- Contributor or Owner permissions on the Azure AI Foundry project.
+- A project created in Azure AI Foundry.
+- Sufficient quota for GPT-4o in your Azure region.
+- Python 3.8+ and Azure AI Foundry services (if you plan to use the model programmatically).
 
 ## Introduction
 
-GPT-4o is a state-of-the-art large language model available through Azure OpenAI Service and Azure AI Foundry. Deploying GPT-4o in Azure AI Foundry allows you to use the model for generative AI applications, including chat, summarization, and more.
+GPT-4o is a state-of-the-art large language model available through Azure OpenAI Service. Deploying GPT-4o in Azure AI Foundry allows you to use it for chat, completions, and other generative AI scenarios. You can deploy the model using the Azure AI Foundry portal, and then access it via REST API or SDK.
 
-You can deploy GPT-4o using the Azure AI Foundry portal or programmatically. This article focuses on the portal experience, with a note on programmatic deployment.
+## 1. Deploy GPT-4o Using the Azure AI Foundry Portal
 
----
+1. **Sign in to the Azure AI Foundry portal**  
+   Go to [https://ai.azure.com](https://ai.azure.com){:target="_blank"} and sign in with your Azure account.
 
-## 1. Set Up Your Environment
+2. **Select your project**  
+   On the left navigation pane, select **Projects** and choose your project.
 
-Before deploying, ensure you have a project in Azure AI Foundry and the required permissions.
+3. **Open the Model Catalog**  
+   In your project, select **Model catalog** from the navigation menu.
 
-### 1.1. Create or Select a Project
+4. **Search for GPT-4o**  
+   Use the search bar to enter `gpt-4o`.  
+   - You can also filter by **Provider**: Azure OpenAI, and **Deployment options**: Azure OpenAI.
 
-1. Go to the [Azure AI Foundry portal](https://ai.azure.com){:target="_blank"}.
-2. In the left navigation, select **Projects**.
-3. Select an existing project or create a new one by selecting **+ New project** and following the prompts.
+5. **Select the GPT-4o model**  
+   Click on the **GPT-4o** model card to open its details.
 
-### 1.2. Check Model Availability
+6. **Deploy the model**  
+   - Click **Deploy**.
+   - In the deployment form, provide:
+     - **Deployment name**: Enter a unique name (e.g., `gpt-4o-deployment`).
+     - **Model version**: Select the latest available version.
+     - **Deployment type**: Choose **Azure OpenAI**.
+     - **Quota**: Ensure you have sufficient quota for GPT-4o in your region.
+   - Click **Deploy** to start the deployment.
 
-1. In your project, select **Model catalog** from the left menu.
-2. Search for **GPT-4o**.
-3. Confirm that the model is available for deployment in your region. If not, check your region or contact your administrator.
+7. **Monitor deployment status**  
+   - Go to the **Deployments** tab in your project.
+   - Wait for the deployment status to show **Succeeded**.
 
----
+## 2. (Optional) Access the Deployed Model Programmatically
 
-## 2. Deploy the GPT-4o Model
+After deployment, you can use the model via REST API or SDK. The following example shows how to use the Python SDK.
 
-### 2.1. Start the Deployment
+### Environment Setup
 
-1. In the **Model catalog**, select the **GPT-4o** model card.
-2. Click **Deploy**.
+Install the required Python libraries and set environment variables.
 
-### 2.2. Configure Deployment Settings
+=== "Windows"
+    1. Create and activate a virtual environment:
+        ```cmd
+        python -m venv .venv
+        .venv\Scripts\activate
+        ```
+    2. Install required libraries:
+        ```cmd
+        pip install azure-ai-inference==1.0.0b9 azure-core==1.33.0 azure-identity==1.21.0
+        ```
+    3. Set environment variables:
+        ```cmd
+        set AZURE_OPENAI_CHAT_ENDPOINT=https://<your-resource-name>.openai.azure.com/openai/deployments/<your-deployment-name>
+        set AZURE_OPENAI_CHAT_KEY=<your-azure-openai-key>
+        ```
 
-1. **Deployment name**: Enter a unique name for your deployment (e.g., `gpt-4o-prod`).
-2. **Deployment type**: Choose between **Serverless API** (pay-per-token) or **Managed compute** (dedicated resources).  
-   - *Serverless API* is recommended for most scenarios.
-3. **Project**: Select your target project.
-4. **Region**: Confirm or select the region for deployment.
-5. **Quota**: Ensure you have sufficient quota for the model and deployment type.
-6. (Optional) **Advanced settings**: Configure scaling, networking, or authentication as needed.
+=== "Linux/macOS"
+    1. Create and activate a virtual environment:
+        ```bash
+        python3 -m venv .venv
+        source .venv/bin/activate
+        ```
+    2. Install required libraries:
+        ```bash
+        pip install azure-ai-inference==1.0.0b9 azure-core==1.33.0 azure-identity==1.21.0
+        ```
+    3. Set environment variables:
+        ```bash
+        export AZURE_OPENAI_CHAT_ENDPOINT=https://<your-resource-name>.openai.azure.com/openai/deployments/<your-deployment-name>
+        export AZURE_OPENAI_CHAT_KEY=<your-azure-openai-key>
+        ```
 
-### 2.3. Review and Deploy
+## 3. Main Code Components
 
-1. Review your settings.
-2. Click **Deploy**.
+### a. Import Required Libraries
 
-The deployment process may take a few minutes. You can monitor the status in the **Deployments** tab of your project.
+Import the Azure AI Inference client and message types.
 
----
+```python
+from azure.ai.inference import ChatCompletionsClient
+from azure.ai.inference.models import SystemMessage, UserMessage
+from azure.core.credentials import AzureKeyCredential
+import os
+```
 
-## 3. Test the Deployment
+### b. Set Up the Client
 
-After deployment, you can test the model directly in the portal or by using the provided endpoint and key.
+Create a client using your endpoint and key.
 
-### 3.1. Test in the Portal
+```python
+endpoint = os.environ["AZURE_OPENAI_CHAT_ENDPOINT"]
+key = os.environ["AZURE_OPENAI_CHAT_KEY"]
 
-1. Go to your project’s **Deployments** tab.
-2. Select your GPT-4o deployment.
-3. Use the **Test in Studio** or **Try it** feature to send a prompt and view the response.
+client = ChatCompletionsClient(
+    endpoint=endpoint,
+    credential=AzureKeyCredential(key),
+    api_version="2024-06-01",  # Use the latest supported API version
+)
+```
 
-### 3.2. Get Endpoint and Key
+### c. Send a Chat Completion Request
 
-1. In the deployment details, find the **Endpoint URL** and **API key**.
-2. Use these values to call the model from your applications or scripts.
+Send a prompt to the deployed GPT-4o model.
 
----
+```python
+response = client.complete(
+    messages=[
+        SystemMessage("You are a helpful assistant."),
+        UserMessage("How can I use GPT-4o in Azure AI Foundry?"),
+    ]
+)
+print(response.choices[0].message.content)
+```
 
-## 4. (Optional) Deploy Programmatically
+## 4. Complete Example
 
-You can also deploy GPT-4o using the Azure AI Foundry Python SDK or Azure CLI. For most users, the portal is the recommended approach.
+```python
+import os
+from azure.ai.inference import ChatCompletionsClient
+from azure.ai.inference.models import SystemMessage, UserMessage
+from azure.core.credentials import AzureKeyCredential
 
-- For code samples, see [Azure AI Foundry documentation](https://learn.microsoft.com/azure/ai-foundry/){:target="_blank"}.
+def main():
+    endpoint = os.environ["AZURE_OPENAI_CHAT_ENDPOINT"]
+    key = os.environ["AZURE_OPENAI_CHAT_KEY"]
 
----
+    client = ChatCompletionsClient(
+        endpoint=endpoint,
+        credential=AzureKeyCredential(key),
+        api_version="2024-06-01",
+    )
 
-## 5. Clean Up Resources
+    response = client.complete(
+        messages=[
+            SystemMessage("You are a helpful assistant."),
+            UserMessage("How can I use GPT-4o in Azure AI Foundry?"),
+        ]
+    )
+    print(response.choices[0].message.content)
 
-To avoid unnecessary charges, delete deployments you no longer need:
+if __name__ == "__main__":
+    main()
+```
 
-1. Go to your project’s **Deployments** tab.
-2. Select the deployment.
-3. Click **Delete**.
+**Explanation:**  
+This script sends a chat prompt to your deployed GPT-4o model and prints the response.
 
----
+## 5. Run the Example Code
+
+1. Ensure your environment variables are set.
+2. Run the script:
+    ```bash
+    python <script-name>.py
+    ```
 
 ## Next Steps
 
-- [Use GPT-4o for chat completions in Python](https://learn.microsoft.com/azure/ai-foundry/how-to/use-gpt4o-chat-completions){:target="_blank"}
-- [Manage deployments in Azure AI Foundry](https://learn.microsoft.com/azure/ai-foundry/how-to/manage-deployments){:target="_blank"}
-- [Explore the model catalog in Azure AI Foundry](https://learn.microsoft.com/azure/ai-foundry/how-to/model-catalog-overview){:target="_blank"}
-
-For more information, see the [Azure AI Foundry documentation](https://learn.microsoft.com/azure/ai-foundry/){:target="_blank"}.
+- [Explore the model catalog in Azure AI Foundry portal](https://learn.microsoft.com/azure/ai-foundry/how-to/model-catalog-overview){:target="_blank"}
+- [Use GPT-4o for chat and completions](https://learn.microsoft.com/azure/ai-services/openai/how-to/chatgpt){:target="_blank"}
+- [Manage deployments in Azure AI Foundry](https://learn.microsoft.com/azure/ai-foundry/how-to/deploy-models-managed){:target="_blank"}
+- [Azure AI Foundry documentation](https://learn.microsoft.com/azure/ai-foundry/){:target="_blank"}

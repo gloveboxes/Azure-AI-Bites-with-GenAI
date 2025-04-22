@@ -29,7 +29,7 @@ system_message_file = parent_dir / "system_message.md"
 with open(system_message_file, "r", encoding="utf-8") as f:
     system_message = f.read()
 
-recipes_file_name = parent_dir / "recipes.yaml"
+recipes_file_name = parent_dir / "recipes.yml"
 
 with open(recipes_file_name, "r", encoding="utf-8") as f:
     data = yaml.safe_load(f)

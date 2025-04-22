@@ -1,70 +1,137 @@
-"""Generates recipes using Azure OpenAI GPT-4.1 model."""
+#!/usr/bin/env python3
+"""
+Generates recipes using Azure OpenAI GPT-4.1 model and updates MkDocs navigation.
+"""
 
 import os
 from pathlib import Path
-
+import yaml
+from dotenv import load_dotenv
 from azure.ai.inference import ChatCompletionsClient
 from azure.ai.inference.models import SystemMessage, UserMessage
 from azure.core.credentials import AzureKeyCredential
-from dotenv import load_dotenv
-import yaml
-
-# Load environment variables from .env file
-load_dotenv()
-
-API_KEY = os.getenv("AZURE_OPENAI_API_KEY")
-
-ENDPOINT = "https://a4plaj2iwguui2-cog.openai.azure.com/openai/deployments/gpt-4.1"
-MODEL_NAME = "gpt-4.1"
-
-client = ChatCompletionsClient(
-    endpoint=ENDPOINT,
-    credential=AzureKeyCredential(API_KEY),
-)
 
 
-script_dir = Path(__file__).parent
-parent_dir = script_dir.parent
-system_message_file = parent_dir / "system_message.md"
-with open(system_message_file, "r", encoding="utf-8") as f:
-    system_message = f.read()
-
-recipes_file_name = parent_dir / "recipes.yml"
-
-with open(recipes_file_name, "r", encoding="utf-8") as f:
-    data = yaml.safe_load(f)
-if not isinstance(data, list):
-    raise ValueError(
-        "prompts.yaml must contain a top‑level list of prompt objects")
+def load_environment(env_path: Path = None) -> None:
+    """Load environment variables from .env file."""
+    load_dotenv(dotenv_path=env_path)
 
 
-for idx, item in enumerate(data, start=1):
-    title = item.get("title")
-    filename = item.get("filename")
-    prompt = item.get("prompt")
-    recipe_file_name = parent_dir / "docs" / filename
-
-    # Check if the recipe file already exists and skip if it does
-    if recipe_file_name.exists():
-        print(f"Skipping {title} as {filename} already exists.")
-        continue
-
-    print(f"Generating {title}...")
-
-    response = client.complete(
-        messages=[
-            SystemMessage(content=system_message),
-            UserMessage(content=prompt),
-        ],
-        temperature=0.1,
-        top_p=0.1,
-        model=MODEL_NAME,
-        max_tokens=30000
+def get_api_client(api_key: str, endpoint: str) -> ChatCompletionsClient:
+    """Initialize and return ChatCompletionsClient."""
+    return ChatCompletionsClient(
+        endpoint=endpoint, credential=AzureKeyCredential(api_key)
     )
 
-    print(f"Completed {title}")
-    print(f"Response Usage: {response.usage.total_tokens} tokens")
 
-    recipe_file_name = parent_dir / "docs" / filename
-    with open(recipe_file_name, "w", encoding="utf-8") as file:
-        file.write(response.choices[0].message.content)
+def load_system_message(path: Path) -> str:
+    """Read and return the system message content."""
+    with open(path, encoding="utf-8") as f:
+        return f.read()
+
+
+def load_yaml(path: Path):
+    """Load and return YAML data."""
+    with open(path, encoding="utf-8") as f:
+        return yaml.safe_load(f)
+
+
+def generate_recipe(
+    client: ChatCompletionsClient,
+    system_message: str,
+    prompt: str,
+    model_name: str,
+    **kwargs,
+) -> str:
+    """Generate a recipe using Azure OpenAI and return its content."""
+    response = client.complete(
+        messages=[SystemMessage(content=system_message), UserMessage(content=prompt)],
+        model=model_name,
+        **kwargs,
+    )
+    return response.choices[0].message.content
+
+
+def write_text(path: Path, text: str) -> None:
+    """Ensure directory exists and write text to the given file path."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with open(path, "w", encoding="utf-8") as f:
+        f.write(text)
+
+
+def process_recipes(
+    client: ChatCompletionsClient,
+    data: list,
+    docs_dir: Path,
+    system_message: str,
+    model_name: str,
+) -> list:
+    """Generate recipe files and return metadata for navigation."""
+    recipes = []
+    for item in data:
+        title = item.get("title")
+        filename = item.get("filename")
+        prompt = item.get("prompt")
+        target_path = docs_dir / filename
+
+        recipes.append({"title": title, "filename": filename})
+
+        if target_path.exists():
+            print(f"Skipping {title}: {filename} already exists.")
+            continue
+
+        print(f"Generating {title}...")
+        content = generate_recipe(
+            client,
+            system_message,
+            prompt,
+            model_name,
+            temperature=0.1,
+            top_p=0.1,
+            max_tokens=30000,
+        )
+        write_text(target_path, content)
+        print(f"Completed {title}")
+
+    return recipes
+
+
+def update_mkdocs_nav(nav_items: list, mkdocs_path: Path) -> None:
+    """Update the nav section in mkdocs.yml with the given items."""
+    mkdocs_data = load_yaml(mkdocs_path)
+    if not isinstance(mkdocs_data, dict):
+        raise ValueError(
+            "mkdocs.yml must contain a top-level dictionary of configuration options"
+        )
+
+    mkdocs_data["nav"] = [{item["title"]: item["filename"]} for item in nav_items]
+    write_text(mkdocs_path, yaml.dump(mkdocs_data, sort_keys=False))
+
+
+def main():
+    """Main function to load environment, generate recipes, and update MkDocs."""
+    base_dir = Path(__file__).resolve().parent.parent
+    load_environment(base_dir / ".env")
+
+    api_key = os.getenv("AZURE_OPENAI_API_KEY")
+    endpoint = os.getenv("AZURE_OPENAI_API_ENDPOINT")
+    model_name = "gpt-4.1"
+
+    client = get_api_client(api_key, endpoint)
+    system_message = load_system_message(base_dir / "system_message.md")
+
+    recipes_data = load_yaml(base_dir / "recipes.yml")
+    if not isinstance(recipes_data, list):
+        raise ValueError("recipes.yml must contain a top-level list of prompt objects")
+
+    docs_dir = base_dir / "docs"
+    recipes = process_recipes(
+        client, recipes_data, docs_dir, system_message, model_name
+    )
+
+    update_mkdocs_nav(recipes, base_dir / "mkdocs.yml")
+    print(f"✅ Injected {len(recipes)} recipes into nav section of mkdocs.yml")
+
+
+if __name__ == "__main__":
+    main()

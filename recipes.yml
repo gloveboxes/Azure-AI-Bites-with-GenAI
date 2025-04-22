@@ -9,13 +9,6 @@
     How to migrate from OpenAI Chat Completion to an Azure Inference Chat Completion.
     Before the Azure inference code example, include a table that maps parameters from OpenAI ChatCompletion API to the Azure Inference API.
     Show code examples of both OpenAI Chat Completion and Azure Inference.
-- title: "Migrating from the OpenAI Chat Completion to Azure OpenAI Chat Completion"
-  filename: recipe_4a_migrating.md
-  prompt: |
-    How to migrate from OpenAI Chat Completion to an Azure OpenAI Chat Completion API.
-    Use key authentication.
-    Before the Azure OpenAI code example, include a table that maps parameters from OpenAI ChatCompletion API to the Azure OpenAI API.
-    Show code examples of both OpenAI Chat Completion and Azure OpenAI API Chat Completion.
 - title: "Generate an Sales by Region Pie Chart"
   filename: "recipe_5_generate_image.md"
   prompt: |

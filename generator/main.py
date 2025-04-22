@@ -39,11 +39,17 @@ if not isinstance(data, list):
 
 
 for idx, item in enumerate(data, start=1):
-    name = item.get("name")
+    title = item.get("title")
     filename = item.get("filename")
     prompt = item.get("prompt")
+    recipe_file_name = parent_dir / "docs" / filename
 
-    print(f"Generating {name}...")
+    # Check if the recipe file already exists and skip if it does
+    if recipe_file_name.exists():
+        print(f"Skipping {title} as {filename} already exists.")
+        continue
+
+    print(f"Generating {title}...")
 
     response = client.complete(
         messages=[
@@ -56,7 +62,7 @@ for idx, item in enumerate(data, start=1):
         max_tokens=30000
     )
 
-    print(f"Completed {name}")
+    print(f"Completed {title}")
     print(f"Response Usage: {response.usage.total_tokens} tokens")
 
     recipe_file_name = parent_dir / "docs" / filename

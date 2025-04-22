@@ -4,6 +4,7 @@ nav:
   - Introduction: index.md
   - Basic Chat Completion Agent: recipe_3_basic_chat.md
   - Migrate to Azure Inference Chat Completion: recipe_4_migrating.md
+  - Migrate to the Azure OpenAI Chat Completion: recipe_4a_migrating.md
   - Pie Charts with the Code Interpreter: recipe_5_generate_image.md
   
 

@@ -7,3 +7,25 @@ The Azure AI Bites Generator is a tool designed to help you create bite-sized co
 - Python 3.x
 - OpenAI API key
 - Deployed Azure AI Foundry GPT-4.1 Model
+
+## Run the sample generator
+
+```bash
+cd generator
+```
+
+```bash
+main.py
+```
+
+## Run the system message context generator
+
+The system message context generator is a Python script that generates a system message context for the Azure AI Bites Generator. The script references the `system_message_context.yml` file which contains a list of titles and urls.
+
+```bash
+cd generator
+```
+
+```bash
+python system_message_context.py
+```

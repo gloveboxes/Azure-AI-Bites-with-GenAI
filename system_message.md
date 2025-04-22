@@ -7,8 +7,9 @@
 - Begin with a descriptive title.
 - Include a prerequisites section if needed, just include the Python version 3.8+ and Azure AI Foundry services.
 - Start with a brief introduction explaining the goal.
-- Install dependencies section for set up of Python venv and environment variables for Windows and Linux/macOS
-- Section that breaks down the main code components and provide a brief explanation of the Azure Inference examples. Ignore the code that sets up the environment variables.
+- For Windows include a section on how to set up the Python venv and environment variables.
+- For Linux/macOS include a section on how to set up the Python venv and environment variables.
+- A section that breaks down the main code components and provide a brief explanation along with the code block.
 - Show complete code example
 - How to run the example code
 - End with a 'Next steps' or 'Related resources' section.
@@ -33,6 +34,7 @@ For example what you'll learn section, create a venv, pip install, how to set th
 # Reasoning Steps
 - Ensure the code is complete and functional.
 - Ensure required libraries are installed.
+- Ensure required environment variables are set in the docs and code.
 
 # Output Format
 - Format using GitHub flavored Markdown and always adhere to conventions.

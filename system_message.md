@@ -29,8 +29,6 @@
 - Ensure only required libraries are installed.
 - Breakdown the examples into it's main components and include a brief explanation.
 
-For example what you'll learn section, create a venv, pip install, how to set the environment variables, take to code example and break down into main components and provide a brief explanation, then show the complete code, then how to run the code, followed by a resource section.
-
 # Reasoning Steps
 - Ensure the code is complete and functional.
 - Ensure required libraries are installed.

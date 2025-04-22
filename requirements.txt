@@ -1,0 +1,6 @@
+mkdocs
+mkdocs-glightbox
+mkdocs-material
+mkdocs-include-markdown-plugin
+azure-ai-inference==1.0.0b9
+python-dotenv==1.1.0

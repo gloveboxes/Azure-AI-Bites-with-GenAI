@@ -1,0 +1,68 @@
+site_name: Azure AI Bites
+
+nav:
+  - Introduction: index.md
+  - Basic Chat Completion Agent: recipe_3_basic_chat_completions.md
+  - Migrate from OpenAI to Inference SDK: recipe_4_migrate_openai_to_inference.md
+  
+
+plugins:
+  - glightbox
+  - include-markdown
+
+theme:
+  name: material
+  logo: media/favicon.png
+  favicon: media/favicon.png
+  features:
+    - navigation.instant
+    - navigation.footer
+    - content.code.copy
+    - navigation.tabs.sticky 
+    - content.tabs.link
+
+  # Change Font: https://squidfunk.github.io/mkdocs-material/setup/changing-the-fonts/?h=fonts
+  # Google Fonts Supported By Default: https://fonts.google.com/
+  font:
+    code: Roboto Mono #Monospaced
+    text: Roboto #Regular
+  # logo: docs/media/azure-ai-studio.svg
+  palette:
+    - scheme: default  # Light Mode
+      primary: black
+      accent: pink
+      toggle:
+        icon: material/brightness-2
+        name: Switch to dark mode
+    - scheme: slate # Dark Mode
+      primary: amber
+      accent: cyan
+      toggle:
+        icon: material/brightness-7
+        name: Switch to light mode
+
+
+markdown_extensions:
+  - toc:
+      permalink: true
+      toc_depth: 2
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+        alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - attr_list
+  - md_in_html
+  # - pymdownx.emoji:
+      # emoji_index: !!python/name:material.extensions.emoji.twemoji
+      # emoji_generator: !!python/name:material.extensions.emoji.to_svg
+
+
+extra_css:
+  - css/custom.css
+
+# mkdocs.yml
+extra_javascript:
+  - js/custom-nav.js

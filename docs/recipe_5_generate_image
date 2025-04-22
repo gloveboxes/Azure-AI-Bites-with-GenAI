@@ -1,0 +1,132 @@
+# Generate Images Using the Azure Inference SDK in Python
+
+This guide shows you how to generate images using the Azure Inference SDK in Python. You will set up your environment, install required dependencies, and run a sample script that calls the Azure Inference API for image generation.
+
+## Prerequisites
+
+- Python 3.8 or later installed.
+- An Azure subscription.
+- An Azure AI resource with image generation capability (such as Azure OpenAI or Azure AI Studio).
+- Your Azure AI endpoint URL and API key.
+
+## 1. What You'll Learn
+
+- How to set up a Python virtual environment.
+- How to install the Azure Inference SDK and required libraries.
+- How to configure environment variables for authentication.
+- How to use the Azure Inference SDK to generate images.
+- How to run the example script.
+
+## 2. Install Dependencies
+
+### 2.1. Create and Activate a Virtual Environment
+
+**Windows:**
+```cmd
+python -m venv .venv
+.venv\Scripts\activate
+```
+
+**Linux/macOS:**
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+### 2.2. Install Required Python Packages
+
+```bash
+pip install azure-ai-inference==1.0.0b9 azure-core==1.33.0 azure-identity==1.21.0
+```
+
+## 3. Set Environment Variables
+
+Set the following environment variables with your Azure AI endpoint and API key.
+
+**Windows (Command Prompt):**
+```cmd
+set AZURE_AI_IMAGE_ENDPOINT=https://<your-endpoint>.openai.azure.com/
+set AZURE_AI_IMAGE_KEY=<your-api-key>
+```
+
+**Linux/macOS (Bash):**
+```bash
+export AZURE_AI_IMAGE_ENDPOINT=https://<your-endpoint>.openai.azure.com/
+export AZURE_AI_IMAGE_KEY=<your-api-key>
+```
+
+Replace `<your-endpoint>` and `<your-api-key>` with your actual values.
+
+## 4. OpenAI Image Generation Parameters vs Azure Inference API
+
+| OpenAI Parameter | Azure Inference Parameter | Notes                        |
+|------------------|--------------------------|------------------------------|
+| `prompt`         | `prompt`                 | Text prompt for the image    |
+| `n`              | `n`                      | Number of images to generate |
+| `size`           | `size`                   | Image size (e.g., "1024x1024") |
+| `response_format`| `response_format`        | "url" or "b64_json"          |
+| `user`           | Not supported            | Not available in Azure       |
+
+## 5. Main Code Components Explained
+
+- **Import libraries:** Import required Azure SDK modules.
+- **Read environment variables:** Get endpoint and key for authentication.
+- **Create client:** Instantiate the `ImageGenerationsClient` with credentials.
+- **Call image generation:** Use the `generate` method with your prompt and parameters.
+- **Handle response:** Print or process the generated image URLs.
+
+## 6. Complete Code Example
+
+```python
+import os
+from azure.ai.inference import ImageGenerationsClient
+from azure.core.credentials import AzureKeyCredential
+
+def generate_image():
+    try:
+        endpoint = os.environ["AZURE_AI_IMAGE_ENDPOINT"]
+        key = os.environ["AZURE_AI_IMAGE_KEY"]
+    except KeyError:
+        print("Missing AZURE_AI_IMAGE_ENDPOINT or AZURE_AI_IMAGE_KEY")
+        exit(1)
+
+    client = ImageGenerationsClient(endpoint=endpoint, credential=AzureKeyCredential(key))
+
+    prompt = "A futuristic city skyline at sunset, digital art"
+    response = client.generate(
+        prompt=prompt,
+        n=1,
+        size="1024x1024",
+        response_format="url"
+    )
+
+    for i, image in enumerate(response.data):
+        print(f"Image {i+1} URL: {image.url}")
+
+if __name__ == "__main__":
+    generate_image()
+```
+
+## 7. How to Run the Example Code
+
+1. Save the code to a file, for example, `generate_image.py`.
+2. Ensure your virtual environment is activated.
+3. Ensure your environment variables are set.
+4. Run the script:
+
+```bash
+python generate_image.py
+```
+
+You should see the URL(s) of the generated image(s) printed in the console.
+
+## 8. Next Steps and Related Resources
+
+- [Azure AI Inference SDK Documentation](https://learn.microsoft.com/azure/ai-services/inference/)
+- [Azure OpenAI Service Documentation](https://learn.microsoft.com/azure/ai-services/openai/)
+- [Azure AI Python SDK Reference](https://pypi.org/project/azure-ai-inference/)
+- [Responsible AI and Content Guidelines](https://learn.microsoft.com/azure/ai-services/openai/concepts/responsible-use)
+
+---
+
+**Note:** Always review and comply with Azure's responsible AI usage policies when generating content.

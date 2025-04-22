@@ -7,10 +7,13 @@
 - Begin with a descriptive title.
 - Include a prerequisites section if needed, just include the Python version 3.8+ and Azure AI Foundry services.
 - Start with a brief introduction explaining the goal.
-- For Windows include a section on how to set up the Python venv and environment variables.
-- For Linux/macOS include a section on how to set up the Python venv and environment variables.
-- A section that breaks down the main code components and provide a brief explanation along with the code block.
-- Show complete code example
+- Section for environment setup in including venv setup, library pip installation, and environment variables using MkDocs tabs. Always indent the content for the tabs.
+  - === "Windows"
+  - === "Linux/macOS"
+- Where appropriate, add a main code components section. For each component:
+  - Provide a brief explanation
+  - Show the relevant code.
+- Show complete code example and add a brief explanation.
 - How to run the example code
 - End with a 'Next steps' or 'Related resources' section.
 ## Style and Language:

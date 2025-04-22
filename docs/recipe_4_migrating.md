@@ -1,46 +1,88 @@
 # Migrate from OpenAI Chat Completion to Azure Inference Chat Completion
 
-This guide helps you migrate your code from the OpenAI Python SDK's `ChatCompletion` API to the Azure Inference SDK's `ChatCompletionsClient`. You will find a parameter mapping table, code examples for both APIs, and step-by-step migration instructions.
+This guide explains how to migrate your code from the OpenAI `ChatCompletion` API to the Azure Inference `ChatCompletionsClient`. It includes a parameter mapping table and code examples for both APIs.
 
----
-
-## 1. Prerequisites
+## Prerequisites
 
 - Python 3.8 or later
 - Access to Azure AI Foundry services
-- An Azure OpenAI deployment and endpoint
+
+## 1. Parameter Mapping: OpenAI vs Azure Inference
+
+| OpenAI `ChatCompletion` Parameter | Azure Inference `ChatCompletionsClient.complete` Parameter | Notes                                                                                 |
+|-----------------------------------|------------------------------------------------------------|---------------------------------------------------------------------------------------|
+| `model`                          | Set in endpoint URL                                        | Azure uses deployment name in the endpoint URL, not as a parameter                    |
+| `messages`                       | `messages`                                                 | Both use the same message format (list of dicts or message objects)                   |
+| `temperature`                    | `temperature`                                              | Supported                                                                             |
+| `top_p`                          | `top_p`                                                    | Supported                                                                             |
+| `max_tokens`                     | `max_tokens`                                               | Supported                                                                             |
+| `stop`                           | `stop`                                                     | Supported                                                                             |
+| `n`                              | `n`                                                        | Supported                                                                             |
+| `stream`                         | `stream`                                                   | Supported                                                                             |
+| `presence_penalty`               | `presence_penalty`                                         | Supported                                                                             |
+| `frequency_penalty`              | `frequency_penalty`                                        | Supported                                                                             |
+| `logit_bias`                     | `logit_bias`                                               | Supported                                                                             |
+| `user`                           | `user`                                                     | Supported                                                                             |
+| `functions` / `tools`            | `tools`                                                    | Supported (for function calling)                                                      |
+| `function_call` / `tool_choice`  | `tool_choice`                                              | Supported                                                                             |
+| `response_format`                | `response_format`                                          | Supported (for structured output)                                                     |
+| `api_key`                        | `credential`                                               | Use `AzureKeyCredential` or `DefaultAzureCredential`                                  |
+| `base_url`                       | `endpoint`                                                 | Azure endpoint includes deployment name                                               |
+| `api_version`                    | `api_version`                                              | Required for Azure Inference                                                          |
+
+> **Note:** Some advanced OpenAI parameters or features may not be available or may have different behaviors in Azure. Always consult the [Azure Inference documentation](https://learn.microsoft.com/azure/ai-services/openai/reference) for the latest details.
 
 ---
 
-## 2. Parameter Mapping: OpenAI vs Azure Inference
+## 2. Environment Setup
 
-| OpenAI `openai.ChatCompletion.create` | Azure Inference `ChatCompletionsClient.complete` | Notes |
-|---------------------------------------|--------------------------------------------------|-------|
-| `model`                              | *Deployment is set in endpoint URL*              | Azure uses deployment in endpoint, not as a parameter |
-| `messages`                           | `messages`                                       | Same format (list of message objects) |
-| `temperature`                        | `temperature`                                    | Same meaning |
-| `max_tokens`                         | `max_tokens`                                     | Same meaning |
-| `top_p`                              | `top_p`                                          | Same meaning |
-| `stop`                               | `stop`                                           | Same meaning |
-| `n`                                  | `n`                                              | Same meaning |
-| `stream`                             | `stream`                                         | Same meaning |
-| `presence_penalty`                   | `presence_penalty`                               | Same meaning |
-| `frequency_penalty`                  | `frequency_penalty`                              | Same meaning |
-| `logit_bias`                         | `logit_bias`                                     | Same meaning |
-| `user`                               | `user`                                           | Same meaning |
-| `api_key`                            | `credential=AzureKeyCredential(key)`             | Use AzureKeyCredential or Azure Identity |
-| `api_base`                           | `endpoint`                                       | Azure endpoint includes deployment path |
-| `api_version`                        | `api_version`                                    | Must be specified for Azure |
+Set up your Python environment and install the required libraries.
+
+=== "Windows"
+    1. Create and activate a virtual environment:
+        ```cmd
+        python -m venv .venv
+        .venv\Scripts\activate
+        ```
+    2. Install the required libraries:
+        ```cmd
+        pip install openai azure-ai-inference==1.0.0b9 azure-core==1.33.0 azure-identity==1.21.0
+        ```
+    3. Set environment variables:
+        ```cmd
+        set AZURE_OPENAI_CHAT_ENDPOINT=https://<your-resource>.openai.azure.com/openai/deployments/<deployment-name>
+        set AZURE_OPENAI_CHAT_KEY=<your-azure-openai-key>
+        ```
+
+=== "Linux/macOS"
+    1. Create and activate a virtual environment:
+        ```bash
+        python3 -m venv .venv
+        source .venv/bin/activate
+        ```
+    2. Install the required libraries:
+        ```bash
+        pip install openai azure-ai-inference==1.0.0b9 azure-core==1.33.0 azure-identity==1.21.0
+        ```
+    3. Set environment variables:
+        ```bash
+        export AZURE_OPENAI_CHAT_ENDPOINT="https://<your-resource>.openai.azure.com/openai/deployments/<deployment-name>"
+        export AZURE_OPENAI_CHAT_KEY="<your-azure-openai-key>"
+        ```
 
 ---
 
-## 3. Example: OpenAI Chat Completion
+## 3. Main Code Components
+
+### 3.1 OpenAI ChatCompletion Example
+
+**Explanation:**  
+This example uses the OpenAI Python SDK to get a chat completion. You provide the model name, messages, and your API key.
 
 ```python
 import openai
 
-openai.api_key = "YOUR_OPENAI_API_KEY"
-openai.api_base = "https://api.openai.com/v1"
+openai.api_key = "<your-openai-api-key>"
 
 response = openai.ChatCompletion.create(
     model="gpt-3.5-turbo",
@@ -49,9 +91,7 @@ response = openai.ChatCompletion.create(
         {"role": "user", "content": "How many feet are in a mile?"}
     ],
     temperature=0.7,
-    max_tokens=50,
-    n=1,
-    stop=None,
+    max_tokens=50
 )
 
 print(response.choices[0].message["content"])
@@ -59,59 +99,41 @@ print(response.choices[0].message["content"])
 
 ---
 
-## 4. Example: Azure Inference Chat Completion
+### 3.2 Azure Inference ChatCompletionsClient Example
 
-### 4.1. Set Up Python Virtual Environment and Environment Variables
+**Explanation:**  
+This example uses the Azure Inference SDK. The model is specified in the endpoint URL. You authenticate with an Azure key, and the message format is similar to OpenAI.
 
-#### Windows
+```python
+import os
+from azure.ai.inference import ChatCompletionsClient
+from azure.ai.inference.models import SystemMessage, UserMessage
+from azure.core.credentials import AzureKeyCredential
 
-1. Open **Command Prompt**.
-2. Create and activate a virtual environment:
-    ```cmd
-    python -m venv .venv
-    .venv\Scripts\activate
-    ```
-3. Install required libraries:
-    ```cmd
-    pip install azure-ai-inference==1.0.0b9 azure-core==1.33.0
-    ```
-4. Set environment variables:
-    ```cmd
-    set AZURE_OPENAI_CHAT_ENDPOINT=https://<your-resource>.openai.azure.com/openai/deployments/<your-deployment>
-    set AZURE_OPENAI_CHAT_KEY=<your-azure-openai-key>
-    ```
+endpoint = os.environ["AZURE_OPENAI_CHAT_ENDPOINT"]
+key = os.environ["AZURE_OPENAI_CHAT_KEY"]
 
-#### Linux/macOS
+client = ChatCompletionsClient(
+    endpoint=endpoint,
+    credential=AzureKeyCredential(key),
+    api_version="2024-06-01"
+)
 
-1. Open **Terminal**.
-2. Create and activate a virtual environment:
-    ```bash
-    python3 -m venv .venv
-    source .venv/bin/activate
-    ```
-3. Install required libraries:
-    ```bash
-    pip install azure-ai-inference==1.0.0b9 azure-core==1.33.0
-    ```
-4. Set environment variables:
-    ```bash
-    export AZURE_OPENAI_CHAT_ENDPOINT="https://<your-resource>.openai.azure.com/openai/deployments/<your-deployment>"
-    export AZURE_OPENAI_CHAT_KEY="<your-azure-openai-key>"
-    ```
+response = client.complete(
+    messages=[
+        SystemMessage("You are a helpful assistant."),
+        UserMessage("How many feet are in a mile?")
+    ],
+    temperature=0.7,
+    max_tokens=50
+)
+
+print(response.choices[0].message.content)
+```
 
 ---
 
-### 4.2. Main Code Components
-
-- **Import Libraries**: Import Azure Inference SDK and credentials.
-- **Read Environment Variables**: Get endpoint and key.
-- **Create Client**: Use `ChatCompletionsClient` with endpoint and credentials.
-- **Send Messages**: Use `SystemMessage` and `UserMessage` for the conversation.
-- **Get and Print Response**: Access the response content.
-
----
-
-### 4.3. Complete Azure Inference Example
+## 4. Complete Example: Azure Inference Chat Completion
 
 ```python
 import os
@@ -126,18 +148,16 @@ def main():
     client = ChatCompletionsClient(
         endpoint=endpoint,
         credential=AzureKeyCredential(key),
-        api_version="2024-06-01",  # Use the latest supported API version
+        api_version="2024-06-01"
     )
 
     response = client.complete(
         messages=[
             SystemMessage("You are a helpful assistant."),
-            UserMessage("How many feet are in a mile?"),
+            UserMessage("How many feet are in a mile?")
         ],
         temperature=0.7,
-        max_tokens=50,
-        n=1,
-        stop=None,
+        max_tokens=50
     )
 
     print(response.choices[0].message.content)
@@ -146,24 +166,32 @@ if __name__ == "__main__":
     main()
 ```
 
+**Explanation:**  
+This script authenticates with Azure, sends a chat completion request, and prints the assistant's response.
+
 ---
 
-### 4.4. How to Run the Example
+## 5. How to Run the Example
 
-1. Ensure your environment variables are set as described above.
-2. Run the script:
+1. Ensure your environment variables are set as shown above.
+2. Save the code to a file, for example, `azure_chat_completion.py`.
+3. Run the script:
     ```bash
-    python your_script_name.py
+    python azure_chat_completion.py
     ```
 
 ---
 
-## 5. Next Steps
+## 6. Next Steps
 
-- [Azure AI Inference Python SDK documentation](https://learn.microsoft.com/python/api/overview/azure/ai-inference-readme){:target="_blank"}
-- [Azure OpenAI Service documentation](https://learn.microsoft.com/azure/ai-services/openai/){:target="_blank"}
-- [OpenAI Python Library documentation](https://platform.openai.com/docs/libraries/python-library){:target="_blank"}
+- Review the [Azure AI Inference documentation](https://learn.microsoft.com/azure/ai-services/openai/reference){:target="_blank"} for advanced features.
+- Explore structured output, function calling, and streaming responses.
+- Update your code to use Azure-specific features as needed.
 
 ---
 
-By following this guide, you can migrate your OpenAI ChatCompletion code to use Azure Inference with minimal changes. Adjust parameters as needed for your specific use case.
+## Related Resources
+
+- [Azure AI Inference Python SDK documentation](https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/ai/azure-ai-inference){:target="_blank"}
+- [OpenAI API Reference](https://platform.openai.com/docs/api-reference/chat/create){:target="_blank"}
+- [Azure OpenAI Service documentation](https://learn.microsoft.com/azure/ai-services/openai/){:target="_blank"}

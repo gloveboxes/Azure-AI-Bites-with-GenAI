@@ -1,15 +1,20 @@
-# 1. Basic Chat Completion with Azure Inference SDK in Python
+# Basic Chat Completion with Azure Inference SDK in Python
 
-This article shows you how to perform a basic chat completion using the Azure Inference SDK for Python. You will learn how to use `SystemMessage`, `UserMessage`, and `AssistantMessage` to structure a conversation with an AI model.
+This article shows you how to perform a basic chat completion using the Azure Inference SDK for Python. You will learn how to use `SystemMessage`, `UserMessage`, and `AssistantMessage` to structure a conversation with an AI model deployed on Azure AI Foundry.
 
-## 2. Prerequisites
+## Prerequisites
 
 - Python 3.8 or later
-- Access to Azure AI Foundry services (Azure OpenAI endpoint and key)
+- Access to Azure AI Foundry services with a deployed chat model (such as GPT-4o or GPT-3.5)
+- Your Azure OpenAI endpoint and API key
 
-## 3. Environment Setup
+## 1. Introduction
 
-Follow these steps to set up your environment and install the required libraries.
+You will create a simple chat session with the Azure Inference SDK, sending a system prompt, a user message, and an assistant message as context. The assistant will then generate a response.
+
+## 2. Environment Setup
+
+Follow these steps to set up your Python environment and required libraries.
 
 === "Windows"
     1. Create and activate a virtual environment:
@@ -17,9 +22,9 @@ Follow these steps to set up your environment and install the required libraries
         python -m venv .venv
         .venv\Scripts\activate
         ```
-    2. Install the required libraries:
+    2. Install required libraries:
         ```cmd
-        pip install azure-ai-inference==1.0.0b9 azure-core==1.33.0 azure-identity==1.21.0
+        pip install azure-ai-inference==1.0.0b9 azure-core==1.33.0
         ```
     3. Set environment variables:
         ```cmd
@@ -33,9 +38,9 @@ Follow these steps to set up your environment and install the required libraries
         python3 -m venv .venv
         source .venv/bin/activate
         ```
-    2. Install the required libraries:
+    2. Install required libraries:
         ```bash
-        pip install azure-ai-inference==1.0.0b9 azure-core==1.33.0 azure-identity==1.21.0
+        pip install azure-ai-inference==1.0.0b9 azure-core==1.33.0
         ```
     3. Set environment variables:
         ```bash
@@ -43,9 +48,9 @@ Follow these steps to set up your environment and install the required libraries
         export AZURE_OPENAI_CHAT_KEY=<your-api-key>
         ```
 
-## 4. Main Code Components
+## 3. Main Code Components
 
-### 4.1. Import Required Classes
+### 3.1 Import Required Classes
 
 Import the necessary classes from the Azure Inference SDK.
 
@@ -56,9 +61,9 @@ from azure.core.credentials import AzureKeyCredential
 import os
 ```
 
-### 4.2. Set Up the Client
+### 3.2 Initialize the Client
 
-Create a client using your Azure OpenAI endpoint and key.
+Create a client using your endpoint and API key.
 
 ```python
 endpoint = os.environ["AZURE_OPENAI_CHAT_ENDPOINT"]
@@ -71,40 +76,30 @@ client = ChatCompletionsClient(
 )
 ```
 
-### 4.3. Compose the Conversation
+### 3.3 Compose the Conversation
 
-Use `SystemMessage`, `UserMessage`, and `AssistantMessage` to structure the conversation.
-
-- `SystemMessage`: Sets the behavior or context for the assistant.
-- `UserMessage`: Represents a message from the user.
-- `AssistantMessage`: Represents a previous message from the assistant (optional, for multi-turn context).
+Use `SystemMessage`, `UserMessage`, and `AssistantMessage` to provide context and conversation history.
 
 ```python
 messages = [
     SystemMessage("You are a helpful assistant."),
-    UserMessage("What is the capital of France?"),
-    AssistantMessage("The capital of France is Paris. How else can I help you?"),
-    UserMessage("What is the population of Paris?"),
+    UserMessage("Who won the FIFA World Cup in 2018?"),
+    AssistantMessage("France won the FIFA World Cup in 2018."),
+    UserMessage("Who was the top scorer in that tournament?"),
 ]
 ```
 
-### 4.4. Get the Chat Completion
+### 3.4 Get the Chat Completion
 
-Send the messages to the model and get the response.
+Send the conversation to the model and get the assistant's response.
 
 ```python
 response = client.complete(messages=messages)
+assistant_reply = response.choices[0].message.content
+print(assistant_reply)
 ```
 
-### 4.5. Print the Response
-
-Display the assistant's reply.
-
-```python
-print(response.choices[0].message.content)
-```
-
-## 5. Complete Example
+## 4. Complete Example
 
 Here is the complete code example:
 
@@ -126,9 +121,9 @@ def main():
 
     messages = [
         SystemMessage("You are a helpful assistant."),
-        UserMessage("What is the capital of France?"),
-        AssistantMessage("The capital of France is Paris. How else can I help you?"),
-        UserMessage("What is the population of Paris?"),
+        UserMessage("Who won the FIFA World Cup in 2018?"),
+        AssistantMessage("France won the FIFA World Cup in 2018."),
+        UserMessage("Who was the top scorer in that tournament?"),
     ]
 
     response = client.complete(messages=messages)
@@ -139,19 +134,19 @@ if __name__ == "__main__":
 ```
 
 **Explanation:**  
-This script sends a short conversation to the Azure OpenAI model, including a system prompt, user questions, and an assistant reply. The model continues the conversation based on the provided context.
+This script sets up a conversation with context, including a system prompt, a user question, and an assistant's previous answer. It then asks a follow-up question and prints the assistant's response.
 
-## 6. How to Run the Example
+## 5. How to Run the Example
 
-1. Save the code to a file, for example, `chat_completion_example.py`.
-2. Ensure your environment variables are set as described above.
+1. Ensure your environment variables are set as shown in the setup section.
+2. Save the code to a file, for example, `basic_chat_completion.py`.
 3. Run the script:
     ```bash
-    python chat_completion_example.py
+    python basic_chat_completion.py
     ```
 
-## 7. Next Steps
+## 6. Next Steps
 
-- Learn more about [Azure AI Inference SDK for Python](https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/ai/azure-ai-inference){:target="_blank"}
-- Explore [Chat Completions API documentation](https://learn.microsoft.com/azure/ai-services/openai/how-to/chatgpt){:target="_blank"}
-- Try adding more message turns or experiment with different system prompts.
+- Explore [Azure AI Inference SDK documentation](https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/ai/azure-ai-inference){:target="_blank"}.
+- Learn about [advanced chat completion features](https://learn.microsoft.com/azure/ai-services/openai/how-to/chatgpt?pivots=programming-language-python){:target="_blank"}.
+- Try adding more message types or experiment with different system prompts.

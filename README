@@ -1,0 +1,9 @@
+# Azure AI Bites Generator
+
+## Overview
+The Azure AI Bites Generator is a tool designed to help you create bite-sized content for Azure AI. It generates a list of topics, each with a title, description, and a link to an external resource. The generated content is intended to be used for educational purposes, such as blog posts, social media updates, or internal training materials.
+
+## Prerequisites
+- Python 3.x
+- OpenAI API key
+- Deployed Azure AI Foundry GPT-4.1 Model

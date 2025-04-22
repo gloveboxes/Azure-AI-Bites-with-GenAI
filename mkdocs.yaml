@@ -4,7 +4,7 @@ nav:
   - Introduction: index.md
   - Basic Chat Completion Agent: recipe_3_basic_chat.md
   - Migrate to Azure Inference Chat Completion: recipe_4_migrating.md
-  - Generate an image: recipe_5_generate_image.md
+  - Pie Charts with the Code Interpreter: recipe_5_generate_image.md
   
 
 plugins:
@@ -63,7 +63,3 @@ markdown_extensions:
 
 extra_css:
   - css/custom.css
-
-# mkdocs.yml
-extra_javascript:
-  - js/custom-nav.js

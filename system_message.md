@@ -7,7 +7,7 @@
 - Begin with a descriptive title.
 - Include a prerequisites section if needed, include the Python version 3.8+ and Azure AI Foundry services. Do not include Python libraries or Environment Variables in the prerequisites.
 - Start with a brief introduction explaining the goal.
-- Section for environment setup in including venv setup, library pip installation, and environment variables using MkDocs tabs. Always indent the content for the tabs.
+- Section for environment setup including venv setup, library pip installation, and environment variables using MkDocs tabs. Always indent the content for the tabs.
   - === "Windows"
   - === "Linux/macOS"
 - Add a main code components section. For each component:

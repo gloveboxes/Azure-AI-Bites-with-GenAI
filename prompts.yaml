@@ -1,6 +1,0 @@
-- name: "Basic Chat Completion"
-  filename: "recipe_3_basic_chat"
-  prompt: "Generate basic chat completion code in Python using the Azure Inference SDK."
-- name: "Basic Chat Completion"
-  filename: "recipe_5_generate_image"
-  prompt: "Generate image using the Azure Inference SDK."

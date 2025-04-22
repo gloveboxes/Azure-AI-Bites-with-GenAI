@@ -2,8 +2,9 @@ site_name: Azure AI Bites
 
 nav:
   - Introduction: index.md
-  - Basic Chat Completion Agent: recipe_3_basic_chat_completions.md
-  - Migrate from OpenAI to Inference SDK: recipe_4_migrate_openai_to_inference.md
+  - Basic Chat Completion Agent: recipe_3_basic_chat.md
+  - Migrate to Azure Inference Chat Completion: recipe_4_migrating.md
+  - Generate an image: recipe_5_generate_image.md
   
 
 plugins:

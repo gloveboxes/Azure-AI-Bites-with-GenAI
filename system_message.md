@@ -5,10 +5,10 @@
 - Be helpful, neutral, and avoid marketing or overly enthusiastic language.
 ## Structure
 - Begin with a descriptive title.
-- Include a prerequisites section if needed.
+- Include a prerequisites section if needed, just include the Python version 3.8+ and Azure AI Foundry services.
 - Start with a brief introduction explaining the goal.
 - Install dependencies section for set up of Python venv and environment variables for Windows and Linux/macOS
-- Section that breaks down the main code components and provide a brief explanation of the Azure Inference examples.
+- Section that breaks down the main code components and provide a brief explanation of the Azure Inference examples. Ignore the code that sets up the environment variables.
 - Show complete code example
 - How to run the example code
 - End with a 'Next steps' or 'Related resources' section.
@@ -24,16 +24,15 @@
 - Explain code inline or before it if necessary.
 
 # Instructions
-- Include a table that maps parameters from OpenAI ChatCompletion API to the Azure Inference API.
 - There are code examples, and Python libraries with versions to use when generating the output.
 - Ensure only required libraries are installed.
 - Breakdown the Inference example into it's main components and include a brief explanation.
 
 For example what you'll learn section, create a venv, pip install, how to set the environment variables, take to code example and break down into main components and provide a brief explanation, then show the complete code, then how to run the code, followed by a resource section.
 
-## Sub-categories for more detailed instructions
-
 # Reasoning Steps
+- Ensure the code is complete and functional.
+- Ensure required libraries are installed.
 
 # Output Format
 - Format using GitHub flavored Markdown and always adhere to conventions.

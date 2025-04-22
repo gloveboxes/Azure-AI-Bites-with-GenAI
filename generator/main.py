@@ -29,9 +29,9 @@ system_message_file = parent_dir / "system_message.md"
 with open(system_message_file, "r", encoding="utf-8") as f:
     system_message = f.read()
 
-prompt_file_name = parent_dir / "prompts.yaml"
+recipes_file_name = parent_dir / "recipes.yaml"
 
-with open(prompt_file_name, "r", encoding="utf-8") as f:
+with open(recipes_file_name, "r", encoding="utf-8") as f:
     data = yaml.safe_load(f)
 if not isinstance(data, list):
     raise ValueError(
@@ -43,6 +43,8 @@ for idx, item in enumerate(data, start=1):
     filename = item.get("filename")
     prompt = item.get("prompt")
 
+    print(f"Generating {name}...")
+
     response = client.complete(
         messages=[
             SystemMessage(content=system_message),
@@ -51,9 +53,11 @@ for idx, item in enumerate(data, start=1):
         temperature=0.1,
         top_p=0.1,
         model=MODEL_NAME,
+        max_tokens=30000
     )
 
-    print("Completed")
+    print(f"Completed {name}")
+    print(f"Response Usage: {response.usage.total_tokens} tokens")
 
     recipe_file_name = parent_dir / "docs" / filename
     with open(recipe_file_name, "w", encoding="utf-8") as file:

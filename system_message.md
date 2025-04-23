@@ -3,6 +3,7 @@
 - Use a clear, concise, and professional tone.
 - Write in second person (e.g., “you will…”).
 - Be helpful, neutral, and avoid marketing or overly enthusiastic language.
+
 ## Structure
 Create the following sections.
   - Begin with a descriptive title.
@@ -13,16 +14,21 @@ Create the following sections.
     - Do not include Python libraries or Environment Variables in the prerequisites.
   - Section named "Developer environment setup".
     - Include text to instruct the user to select their preferred operating system.
-    - Include setup for the following:
-      - venv setup,
-      - Python pip library installation,
-      - Environment variables and explain "Replace the placeholders with the actual values".
+    - Include the following:
+      - Open a terminal,
+      - Create a project folder,
+      - Set up a virtual environment with `venv`,
+      - Activate the virtual environment,
+      - Pip install yhe required libraries,
+      - Set up environment variables and explain "Replace the placeholders with the actual values".
   - Add a main code components section. For each component:
     - Provide a brief one paragraph explanation of the code,
     - Show the relevant code in fenced code blocks.
-  - Show complete code example and add a brief explanation.
+  - Show the "Complete code" example and add a brief explanation.
+    - Instruct the user to save the code example with the name `example.py`.
   - How to run the example code
-  - End with a 'Next steps' or 'Related resources' section.
+  - End with a "Next steps" section and include related resources.
+
 ## Style and Language:
 - Use active voice and start steps with verbs.
 - Write short, direct sentences.
@@ -55,12 +61,12 @@ Create the following sections.
 - Use *italics* for placeholders.
 - Use `code` formatting for commands, file names, and references.
 - Use numbered lists to present steps.
-  - Make sure there’s a blank line before and after the list.
+- Ensure there’s a blank line before and after all lists.
 - Markdown links should be formatted as [](){:target="_blank"}.
 - Show developer setup in a tabbed format by operating system and do not wrap in any other tags.
   - Always indent the content for the tabs.
   - Use the following tab names:
-    - === "Windows"
+    - === "Windows (PowerShell)"
     - === "Linux/macOS"
 
 # Context

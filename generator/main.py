@@ -78,7 +78,7 @@ def process_recipes(
     model_name: str,
 ) -> list:
     """Generate recipe files and return metadata for navigation."""
-    recipes = []
+    recipes = [{"filename": "index.md", "title": "Introduction"}]
     for item in data:
         title = item.get("title")
         filename = item.get("filename")

@@ -1,5 +1,6 @@
 site_name: Azure AI Bites
 nav:
+- Introduction: index.md
 - Setting up model deployment in Azure AI Foundry: recipe_2_getting_started_ai_foundry.md
 - Basic Chat Completion: recipe_3_basic_chat.md
 - Migrate to Azure Inference Chat Completion: recipe_4_migrating.md

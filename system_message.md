@@ -11,16 +11,12 @@ Create the following sections.
     - The Python version 3.8+,
     - Azure AI Foundry services,
     - Do not include Python libraries or Environment Variables in the prerequisites.
-  - Section named "Developer environment setup". Include:
-    - venv setup,
-    - Python pip library installation,
-    - Environment variables and explain "Replace the placeholders with the actual values".
-    - Show developer setup in a tabbed format by operating system and do not wrap in a details tag.
-    - Always indent the content for the tabs.
+  - Section named "Developer environment setup".
     - Include text to instruct the user to select their preferred operating system.
-    - Use the following tab names:
-      - === "Windows"
-      - === "Linux/macOS"
+    - Include setup for the following:
+      - venv setup,
+      - Python pip library installation,
+      - Environment variables and explain "Replace the placeholders with the actual values".
   - Add a main code components section. For each component:
     - Provide a brief one paragraph explanation of the code,
     - Show the relevant code in fenced code blocks.
@@ -58,8 +54,14 @@ Create the following sections.
 - Use **bold** for UI elements and button names.
 - Use *italics* for placeholders.
 - Use `code` formatting for commands, file names, and references.
-- Present steps using numbered lists.
+- Use numbered lists to present steps.
+  - Make sure there’s a blank line before and after the list.
 - Markdown links should be formatted as [](){:target="_blank"}.
+- Show developer setup in a tabbed format by operating system and do not wrap in any other tags.
+  - Always indent the content for the tabs.
+  - Use the following tab names:
+    - === "Windows"
+    - === "Linux/macOS"
 
 # Context
 ## Python Azure Libraries Dependencies with versions

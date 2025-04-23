@@ -2,66 +2,23 @@
 
 ## Introduction
 
-This guide explains how to deploy a new GPT-4o model in Azure AI Foundry. You will use the Azure AI Foundry portal to select, configure, and deploy the GPT-4o model for your project. After deployment, you can use the model for inference in your applications.
+This guide explains how to deploy a new GPT-4o model in Azure AI Foundry. You will use the Azure AI Foundry portal to select, configure, and deploy the GPT-4o model for use in your applications. The goal is to make the model available as an endpoint for inference.
 
 ## Prerequisites
 
 Before you begin, ensure you have the following:
 
-- Python 3.8 or later.
-- Access to Azure AI Foundry services.
-- Sufficient permissions in your Azure subscription to create and manage resources in Azure AI Foundry.
+- Python 3.8 or later
+- Access to Azure AI Foundry services
+- Sufficient permissions in your Azure subscription to deploy models and create resources
 
-## 1. Deploy GPT-4o Model Using Azure AI Foundry Portal
+## 1. Developer environment setup
 
-Follow these steps to deploy the GPT-4o model:
-
-1. **Sign in to Azure AI Foundry Portal**
-   - Go to [Azure AI Foundry portal](https://ai.azure.com){:target="_blank"}.
-   - Sign in with your Azure account.
-
-2. **Create or Select a Project**
-   - In the portal, select an existing project or create a new one by selecting **New project** and following the prompts.
-
-3. **Open the Model Catalog**
-   - In your project, navigate to the **Model catalog** from the left navigation pane.
-
-4. **Search for GPT-4o**
-   - Use the search bar to enter `gpt-4o`.
-   - Locate the **GPT-4o** model from the search results.
-
-5. **Review Model Details**
-   - Select the GPT-4o model card to view details, including supported deployment options, pricing, and documentation.
-
-6. **Deploy the Model**
-   - Click **Deploy**.
-   - Choose your deployment option:
-     - **Azure OpenAI** (recommended for GPT-4o).
-     - **Managed Compute** or **Serverless API** (if available).
-   - Configure deployment settings:
-     - **Deployment name**: Enter a unique name.
-     - **Region**: Select the Azure region.
-     - **Scale settings**: Choose the compute size and scaling options.
-   - Review and accept the license terms.
-   - Click **Deploy** to start the deployment process.
-
-7. **Monitor Deployment Status**
-   - Go to the **Deployments** tab in your project to monitor the deployment status.
-   - Wait until the status changes to **Succeeded**.
-
-8. **Get Endpoint and Keys**
-   - After deployment, select your deployment to view details.
-   - Copy the **Endpoint URL** and **API key** for use in your applications.
-
-## 2. Developer Environment Setup
-
-Select your preferred operating system tab and follow the steps to set up your environment for using the deployed GPT-4o model.
-
-Select your preferred operating system:
+Select your preferred operating system and follow the steps to set up your environment.
 
 === "Windows"
 
-    1. Open **Command Prompt**.
+    1. Open **Command Prompt** or **PowerShell**.
     2. Create and activate a virtual environment:
         ```cmd
         python -m venv .venv
@@ -69,17 +26,17 @@ Select your preferred operating system:
         ```
     3. Install required Python libraries:
         ```cmd
-        pip install azure-ai-inference==1.0.0b9 azure-core==1.33.0 azure-identity==1.21.0
+        pip install azure-ai-inference==1.0.0b9 azure-core==1.33.0 azure-identity==1.21.0 azure-storage-blob==12.25.1 azure-ai-projects==1.0.0b9
         ```
-    4. Set environment variables (replace *<your_value>* with your actual values):
+    4. Set environment variables. Replace the placeholders with the actual values:
         ```cmd
-        set AZURE_OPENAI_CHAT_ENDPOINT=<your_endpoint_url>
-        set AZURE_OPENAI_CHAT_KEY=<your_api_key>
+        set AZURE_OPENAI_CHAT_ENDPOINT=https://<your-resource-name>.openai.azure.com/openai/deployments/<your-deployment-name>
+        set AZURE_OPENAI_CHAT_KEY=<your-azure-openai-key>
         ```
 
 === "Linux/macOS"
 
-    1. Open **Terminal**.
+    1. Open a terminal window.
     2. Create and activate a virtual environment:
         ```bash
         python3 -m venv .venv
@@ -87,68 +44,72 @@ Select your preferred operating system:
         ```
     3. Install required Python libraries:
         ```bash
-        pip install azure-ai-inference==1.0.0b9 azure-core==1.33.0 azure-identity==1.21.0
+        pip install azure-ai-inference==1.0.0b9 azure-core==1.33.0 azure-identity==1.21.0 azure-storage-blob==12.25.1 azure-ai-projects==1.0.0b9
         ```
-    4. Set environment variables (replace *<your_value>* with your actual values):
+    4. Set environment variables. Replace the placeholders with the actual values:
         ```bash
-        export AZURE_OPENAI_CHAT_ENDPOINT=<your_endpoint_url>
-        export AZURE_OPENAI_CHAT_KEY=<your_api_key>
+        export AZURE_OPENAI_CHAT_ENDPOINT="https://<your-resource-name>.openai.azure.com/openai/deployments/<your-deployment-name>"
+        export AZURE_OPENAI_CHAT_KEY="<your-azure-openai-key>"
         ```
 
-## 3. Main Code Components
+**Note:** Replace `<your-resource-name>`, `<your-deployment-name>`, and `<your-azure-openai-key>` with your actual Azure OpenAI resource and deployment details.
 
-Below are the main components for using your deployed GPT-4o model for chat completions.
+## 2. Main code components
 
-### 3.1. Import Required Libraries
+### 2.1. Define the GPT-4o deployment endpoint
 
-You need to import the Azure AI Inference client and message types.
+You need to specify the endpoint for your GPT-4o deployment. This is set using the `AZURE_OPENAI_CHAT_ENDPOINT` environment variable.
 
 ```python
 import os
-from azure.ai.inference import ChatCompletionsClient
-from azure.ai.inference.models import SystemMessage, UserMessage
-from azure.core.credentials import AzureKeyCredential
+
+endpoint = os.environ["AZURE_OPENAI_CHAT_ENDPOINT"]
 ```
 
-### 3.2. Set Up the Client
+### 2.2. Authenticate to Azure OpenAI
 
-Create a client instance using your endpoint and API key.
+You can authenticate using an API key or Azure Entra ID. This example uses an API key.
 
 ```python
-endpoint = os.environ["AZURE_OPENAI_CHAT_ENDPOINT"]
+from azure.core.credentials import AzureKeyCredential
+
 key = os.environ["AZURE_OPENAI_CHAT_KEY"]
+credential = AzureKeyCredential(key)
+```
+
+### 2.3. Create the ChatCompletionsClient
+
+This client is used to interact with the deployed GPT-4o model.
+
+```python
+from azure.ai.inference import ChatCompletionsClient
 
 client = ChatCompletionsClient(
     endpoint=endpoint,
-    credential=AzureKeyCredential(key),
-    api_version="2024-06-01",  # Use the API version that matches your deployment
+    credential=credential,
+    api_version="2024-08-01-preview"  # Use the latest supported API version for GPT-4o
 )
 ```
 
-### 3.3. Send a Chat Completion Request
+### 2.4. Send a test prompt to the deployed model
 
-Prepare your messages and send a request to the GPT-4o model.
+You can verify the deployment by sending a simple prompt.
 
 ```python
+from azure.ai.inference.models import SystemMessage, UserMessage
+
 response = client.complete(
     messages=[
         SystemMessage("You are a helpful assistant."),
-        UserMessage("How many feet are in a mile?"),
+        UserMessage("What is new in GPT-4o?")
     ]
 )
-```
-
-### 3.4. Process the Response
-
-Extract and print the model's response.
-
-```python
 print(response.choices[0].message.content)
 ```
 
-## 4. Complete Code Example
+## 3. Complete code example
 
-This example demonstrates how to connect to your deployed GPT-4o model and get a chat completion.
+The following script demonstrates how to connect to your deployed GPT-4o model and send a prompt:
 
 ```python
 import os
@@ -157,19 +118,24 @@ from azure.ai.inference.models import SystemMessage, UserMessage
 from azure.core.credentials import AzureKeyCredential
 
 def main():
-    endpoint = os.environ["AZURE_OPENAI_CHAT_ENDPOINT"]
-    key = os.environ["AZURE_OPENAI_CHAT_KEY"]
+    try:
+        endpoint = os.environ["AZURE_OPENAI_CHAT_ENDPOINT"]
+        key = os.environ["AZURE_OPENAI_CHAT_KEY"]
+    except KeyError:
+        print("Missing environment variable 'AZURE_OPENAI_CHAT_ENDPOINT' or 'AZURE_OPENAI_CHAT_KEY'")
+        print("Set them before running this script.")
+        exit(1)
 
     client = ChatCompletionsClient(
         endpoint=endpoint,
         credential=AzureKeyCredential(key),
-        api_version="2024-06-01",
+        api_version="2024-08-01-preview"
     )
 
     response = client.complete(
         messages=[
             SystemMessage("You are a helpful assistant."),
-            UserMessage("How many feet are in a mile?"),
+            UserMessage("What is new in GPT-4o?")
         ]
     )
 
@@ -180,21 +146,25 @@ if __name__ == "__main__":
 ```
 
 **Explanation:**  
-This script authenticates to your deployed GPT-4o model using the endpoint and API key, sends a simple chat prompt, and prints the model's response.
+This script authenticates to your Azure OpenAI GPT-4o deployment and sends a test prompt. The response from the model is printed to the console.
 
-## 5. How to Run the Example Code
+## 4. How to run the example code
 
 1. Ensure your environment variables are set as described in the setup section.
-2. Save the complete code example to a file, for example, `chat_gpt4o_example.py`.
+2. Save the complete code example to a file, for example, `test_gpt4o_deployment.py`.
 3. Run the script:
-    ```bash
-    python chat_gpt4o_example.py
-    ```
-4. You should see the model's response printed in your terminal.
 
-## Next Steps
+    ```bash
+    python test_gpt4o_deployment.py
+    ```
+
+You should see the model's response printed in your terminal.
+
+## 5. Next steps
 
 - [Explore the model catalog in Azure AI Foundry portal](https://learn.microsoft.com/azure/ai-foundry/how-to/model-catalog-overview){:target="_blank"}
+- [Deploy and manage models in Azure AI Foundry](https://learn.microsoft.com/azure/ai-foundry/how-to/deploy-models-managed){:target="_blank"}
 - [Azure OpenAI Service documentation](https://learn.microsoft.com/azure/ai-services/openai/overview){:target="_blank"}
-- [Azure AI Foundry documentation](https://learn.microsoft.com/azure/ai-foundry/){:target="_blank"}
-- [Build generative AI apps with Azure AI Foundry](https://learn.microsoft.com/azure/ai-foundry/how-to/deploy-models-managed){:target="_blank"}
+- [Azure AI Foundry Python SDK reference](https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/ai/azure-ai-inference){:target="_blank"}
+
+For more advanced deployment options, such as managed compute or serverless APIs, refer to the Azure AI Foundry documentation.

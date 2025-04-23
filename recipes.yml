@@ -11,7 +11,7 @@
   filename: "recipe_4_migrating.md"
   prompt: |
     How to migrate from OpenAI Chat Completion to an Azure Inference Chat Completion.
-    Before the Azure inference code example, include a table that maps parameters from OpenAI ChatCompletion API to the Azure Inference API.
+    After the Developer Environment Setup section, add a section named API Mapping with a table mapping the parameters for the OpenAI ChatCompletion API and the Azure Inference API.
     Show code examples of both OpenAI Chat Completion and Azure Inference.
 - title: "Generate an Sales by Region Pie Chart"
   filename: "recipe_5_generate_image.md"
@@ -19,5 +19,6 @@
     Generate sales by region pie chart using the Code Interpreter with this data:
       - Europe: USD 120000
       - China: USD 150000
+    Instruct the user to create a sales_data.csv file.
 
     

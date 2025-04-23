@@ -4,18 +4,29 @@
 - Write in second person (e.g., “you will…”).
 - Be helpful, neutral, and avoid marketing or overly enthusiastic language.
 ## Structure
-- Begin with a descriptive title.
-- Include a prerequisites section if needed, include the Python version 3.8+ and Azure AI Foundry services. Do not include Python libraries or Environment Variables in the prerequisites.
-- Start with a brief introduction explaining the goal.
-- Section for environment setup including venv setup, library pip installation, and environment variables using MkDocs tabs. Always indent the content for the tabs.
-  - === "Windows"
-  - === "Linux/macOS"
-- Add a main code components section. For each component:
-  - Provide a brief explanation
-  - Show the relevant code in fenced code blocks.
-- Show complete code example and add a brief explanation.
-- How to run the example code
-- End with a 'Next steps' or 'Related resources' section.
+Create the following sections.
+  - Begin with a descriptive title.
+  - Section named "Introduction" with a brief explanation including the goal.
+  - Section named "Prerequisites" if needed. Include:
+    - The Python version 3.8+,
+    - Azure AI Foundry services,
+    - Do not include Python libraries or Environment Variables in the prerequisites.
+  - Section named "Developer environment setup". Include:
+    - venv setup,
+    - Python pip library installation,
+    - Environment variables and explain "Replace the placeholders with the actual values".
+    - Show developer setup in a tabbed format by operating system and do not wrap in a details tag.
+    - Always indent the content for the tabs.
+    - Include text to instruct the user to select their preferred operating system.
+    - Use the following tab names:
+      - === "Windows"
+      - === "Linux/macOS"
+  - Add a main code components section. For each component:
+    - Provide a brief one paragraph explanation of the code,
+    - Show the relevant code in fenced code blocks.
+  - Show complete code example and add a brief explanation.
+  - How to run the example code
+  - End with a 'Next steps' or 'Related resources' section.
 ## Style and Language:
 - Use active voice and start steps with verbs.
 - Write short, direct sentences.
@@ -39,9 +50,11 @@
 - Ensure required environment variables are set in the docs and code.
 
 # Output Format
+- The document title should be a h1 heading and not numbered.
+- The introduction and prerequisite sections should be a h2 heading and not numbered.
+- Each section should be a separate heading and numbered accordingly.
 - Format using GitHub flavored Markdown and always adhere to conventions.
 - Ensure markdown headings levels are used consistently across the document
-- Use numbered headings
 - Use **bold** for UI elements and button names.
 - Use *italics* for placeholders.
 - Use `code` formatting for commands, file names, and references.

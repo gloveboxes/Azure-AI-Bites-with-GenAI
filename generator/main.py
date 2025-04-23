@@ -12,6 +12,12 @@ from azure.ai.inference.models import SystemMessage, UserMessage
 from azure.core.credentials import AzureKeyCredential
 
 
+MODEL_NAME = "gpt-4.1"
+TEMPERATURE = 0.1
+TOP_P = 0.1
+MAX_TOKENS = 30000
+
+
 def load_environment(env_path: Path = None) -> None:
     """Load environment variables from .env file."""
     load_dotenv(dotenv_path=env_path)
@@ -91,9 +97,9 @@ def process_recipes(
             system_message,
             prompt,
             model_name,
-            temperature=0.1,
-            top_p=0.1,
-            max_tokens=30000,
+            temperature=TEMPERATURE,
+            top_p=TOP_P,
+            max_tokens=MAX_TOKENS,
         )
         write_text(target_path, content)
         print(f"Completed {title}")
@@ -120,7 +126,6 @@ def main():
 
     api_key = os.getenv("AZURE_OPENAI_API_KEY")
     endpoint = os.getenv("AZURE_OPENAI_API_ENDPOINT")
-    model_name = "gpt-4.1"
 
     client = get_api_client(api_key, endpoint)
     system_message = load_and_combine_system_messages(
@@ -133,7 +138,7 @@ def main():
 
     docs_dir = base_dir / "docs"
     recipes = process_recipes(
-        client, recipes_data, docs_dir, system_message, model_name
+        client, recipes_data, docs_dir, system_message, MODEL_NAME
     )
 
     update_mkdocs_nav(recipes, base_dir / "mkdocs.yml")

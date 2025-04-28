@@ -6,6 +6,7 @@ nav:
 - Migrate to Azure Inference Chat Completion: recipe_4_migrating.md
 - Generate an Sales by Region Pie Chart: recipe_5_generate_image.md
 - Evaluate your Agent: recipe_6_evaluations.md
+- Implementing safety systems with Azure AI Content Safety: recipe_7_safety.md
 plugins:
 - glightbox
 - include-markdown

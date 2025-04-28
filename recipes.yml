@@ -27,5 +27,14 @@
     -	Generate eval dataset
     -	Local eval run
     -	Online eval run
+- title: Implementing safety systems with Azure AI Content Safety
+  filename: "recipe_7_safety.md"
+  prompt: |
+    Show how you can add safety elements after evaluation. Discuss and show examples:
+    -	Prompt shields
+    -	Groundedness
+    -	Custom categories
+    -	Text moderation
+
 
     

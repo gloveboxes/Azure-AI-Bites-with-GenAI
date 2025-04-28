@@ -1,8 +1,8 @@
-# Basic Chat Completion with Azure Inference SDK and Key Authentication
+# Basic Chat Completion with Azure AI Inference SDK and Key Authentication
 
 ## Introduction
 
-This article shows you how to perform a basic chat completion using the Azure Inference SDK for Python. You will use key authentication and the `SystemMessage`, `UserMessage`, and `AssistantMessage` message types to interact with an Azure AI Foundry chat model.
+This article shows you how to perform a basic chat completion using the Azure AI Inference SDK in Python. You will learn how to use `SystemMessage`, `UserMessage`, and `AssistantMessage` to structure a conversation, and how to authenticate using an API key.
 
 ## Prerequisites
 
@@ -11,15 +11,15 @@ This article shows you how to perform a basic chat completion using the Azure In
 
 ## 1. Developer environment setup
 
-Select your preferred operating system and follow the steps to set up your environment.
+Select your preferred operating system and follow the steps below.
 
 === "Windows (PowerShell)"
 
     1. Open a terminal (PowerShell).
     2. Create a project folder:
         ```powershell
-        mkdir azure-inference-chat
-        cd azure-inference-chat
+        mkdir azure-ai-chat-demo
+        cd azure-ai-chat-demo
         ```
     3. Set up a virtual environment:
         ```powershell
@@ -27,7 +27,7 @@ Select your preferred operating system and follow the steps to set up your envir
         ```
     4. Activate the virtual environment:
         ```powershell
-        .\.venv\Scripts\Activate
+        .venv\Scripts\Activate
         ```
     5. Install the required libraries:
         ```powershell
@@ -35,8 +35,8 @@ Select your preferred operating system and follow the steps to set up your envir
         ```
     6. Set up environment variables. Replace the placeholders with the actual values:
         ```powershell
-        $env:AZURE_OPENAI_CHAT_ENDPOINT="https://<your-resource>.openai.azure.com/openai/deployments/<your-deployment>"
-        $env:AZURE_OPENAI_CHAT_KEY="<your-key>"
+        $env:AZURE_OPENAI_CHAT_ENDPOINT="https://<your-resource-name>.openai.azure.com/openai/deployments/<your-deployment-name>"
+        $env:AZURE_OPENAI_CHAT_KEY="<your-api-key>"
         ```
 
 === "Linux/macOS"
@@ -44,8 +44,8 @@ Select your preferred operating system and follow the steps to set up your envir
     1. Open a terminal.
     2. Create a project folder:
         ```bash
-        mkdir azure-inference-chat
-        cd azure-inference-chat
+        mkdir azure-ai-chat-demo
+        cd azure-ai-chat-demo
         ```
     3. Set up a virtual environment:
         ```bash
@@ -61,17 +61,17 @@ Select your preferred operating system and follow the steps to set up your envir
         ```
     6. Set up environment variables. Replace the placeholders with the actual values:
         ```bash
-        export AZURE_OPENAI_CHAT_ENDPOINT="https://<your-resource>.openai.azure.com/openai/deployments/<your-deployment>"
-        export AZURE_OPENAI_CHAT_KEY="<your-key>"
+        export AZURE_OPENAI_CHAT_ENDPOINT="https://<your-resource-name>.openai.azure.com/openai/deployments/<your-deployment-name>"
+        export AZURE_OPENAI_CHAT_KEY="<your-api-key>"
         ```
 
 ## 2. Azure AI Services
 
-Azure AI Foundry provides access to a catalog of AI models, including chat models, for building generative AI applications. The Azure Inference SDK allows you to interact with these models using Python.
+Azure AI Foundry provides access to a wide range of AI models and services, including chat completion models. The Azure AI Inference SDK allows you to interact with these models programmatically.
 
-**Authentication:**  
-This example uses key authentication.  
-- To find your **Key** and **Endpoint**:
+**Authentication:**
+- This example uses Key Authentication.
+- To find your authentication key and endpoint:
     1. In the Azure AI Foundry portal, select your deployment.
     2. From the **SDK** dropdown, select **Azure Inference SDK**.
     3. Select **Authentication type**: Key Authentication. The **Key** and **Endpoint** are displayed.
@@ -104,16 +104,16 @@ client = ChatCompletionsClient(
 )
 ```
 
-### c. Compose the chat messages
+### c. Compose the conversation
 
-This code demonstrates how to use `SystemMessage`, `UserMessage`, and `AssistantMessage` to structure the conversation.
+This section demonstrates how to use `SystemMessage`, `UserMessage`, and `AssistantMessage` to structure the conversation.
 
 ```python
 messages = [
     SystemMessage("You are a helpful assistant."),
     UserMessage("How many feet are in a mile?"),
-    AssistantMessage("There are 5,280 feet in a mile. How else can I help you?"),
-    UserMessage("How many meters is that?"),
+    # Optionally, you can add an AssistantMessage to continue a conversation
+    # AssistantMessage("There are 5280 feet in a mile."),
 ]
 ```
 
@@ -132,10 +132,10 @@ Save the following code as `example.py`.
 
 ```python
 """
-Basic chat completion using Azure Inference SDK with key authentication.
+Basic chat completion using Azure AI Inference SDK with Key Authentication.
 
 This script demonstrates how to use SystemMessage, UserMessage, and AssistantMessage
-to interact with an Azure AI Foundry chat model.
+to structure a conversation and get a response from an Azure OpenAI deployment.
 """
 
 import os
@@ -145,7 +145,7 @@ from azure.core.credentials import AzureKeyCredential
 
 def main():
     """
-    Run a basic chat completion using Azure Inference SDK.
+    Run a basic chat completion using Azure AI Inference SDK.
     """
     # Retrieve endpoint and key from environment variables
     endpoint = os.environ["AZURE_OPENAI_CHAT_ENDPOINT"]
@@ -158,12 +158,12 @@ def main():
         api_version="2024-06-01",
     )
 
-    # Compose the conversation using message types
+    # Compose the conversation
     messages = [
         SystemMessage("You are a helpful assistant."),
         UserMessage("How many feet are in a mile?"),
-        AssistantMessage("There are 5,280 feet in a mile. How else can I help you?"),
-        UserMessage("How many meters is that?"),
+        # You can add an AssistantMessage to continue the conversation if needed
+        # AssistantMessage("There are 5280 feet in a mile."),
     ]
 
     # Get the chat completion response

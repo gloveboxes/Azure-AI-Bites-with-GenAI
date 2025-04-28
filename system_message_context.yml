@@ -21,22 +21,22 @@
   url: https://raw.githubusercontent.com/MicrosoftDocs/azure-ai-docs/refs/heads/main/articles/ai-foundry/how-to/model-catalog-overview.md
 - title: Azure AI Evaluation Sample Common
   fence_type: python
-  url: https://github.com/Azure/azure-sdk-for-python/blob/main/sdk/evaluation/azure-ai-evaluation/samples/evaluation_samples_common.py
+  url: https://raw.githubusercontent.com/Azure/azure-sdk-for-python/refs/heads/main/sdk/evaluation/azure-ai-evaluation/samples/evaluation_samples_common.py
 - title: These samples demonstrate usage of various classes and methods used to perform evaluation in the azure-ai-evaluation library
   fence_type: python
-  url: https://github.com/Azure/azure-sdk-for-python/blob/main/sdk/evaluation/azure-ai-evaluation/samples/evaluation_samples_evaluate.py
+  url: https://raw.githubusercontent.com/Azure/azure-sdk-for-python/refs/heads/main/sdk/evaluation/azure-ai-evaluation/samples/evaluation_samples_evaluate.py
 - title: These samples demonstrate usage of _SafetyEvaluation class with various _SafetyEvaluator instances.
   fence_type: python
-  url: https://github.com/Azure/azure-sdk-for-python/blob/main/sdk/evaluation/azure-ai-evaluation/samples/evaluation_samples_safety_evaluation.py
+  url: https://raw.githubusercontent.com/Azure/azure-sdk-for-python/refs/heads/main/sdk/evaluation/azure-ai-evaluation/samples/evaluation_samples_safety_evaluation.py
 - title: demonstrate usage of various classes and methods used to perform simulation in the azure-ai-evaluation library.
   fence_type: python
-  url: https://github.com/Azure/azure-sdk-for-python/blob/main/sdk/evaluation/azure-ai-evaluation/samples/evaluation_samples_simulate.py
+  url: https://raw.githubusercontent.com/Azure/azure-sdk-for-python/refs/heads/main/sdk/evaluation/azure-ai-evaluation/samples/evaluation_samples_simulate.py
 - title: demonstrate usage of various classes and methods used to perform evaluation with thresholds in the azure-ai-evaluation library.
   fence_type: python
-  url: https://github.com/Azure/azure-sdk-for-python/blob/main/sdk/evaluation/azure-ai-evaluation/samples/evaluation_samples_threshold.py
+  url: https://raw.githubusercontent.com/Azure/azure-sdk-for-python/refs/heads/main/sdk/evaluation/azure-ai-evaluation/samples/evaluation_samples_threshold.py
 - title: red_team_agent_tool_sample.py
   fence_type: python
-  url: https://github.com/Azure/azure-sdk-for-python/blob/main/sdk/evaluation/azure-ai-evaluation/samples/red_team_agent_tool_sample.py
+  url: https://raw.githubusercontent.com/Azure/azure-sdk-for-python/refs/heads/main/sdk/evaluation/azure-ai-evaluation/samples/red_team_agent_tool_sample.py
 - title: semantic_kernel_red_team_agent_sample.py
   fence_type: python
-  url: https://github.com/Azure/azure-sdk-for-python/blob/main/sdk/evaluation/azure-ai-evaluation/samples/semantic_kernel_red_team_agent_sample.py
+  url: https://raw.githubusercontent.com/Azure/azure-sdk-for-python/refs/heads/main/sdk/evaluation/azure-ai-evaluation/samples/semantic_kernel_red_team_agent_sample.py

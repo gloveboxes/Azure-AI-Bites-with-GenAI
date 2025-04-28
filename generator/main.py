@@ -16,6 +16,10 @@ MODEL_NAME = "gpt-4.1"
 TEMPERATURE = 0.1
 TOP_P = 0.1
 MAX_TOKENS = 30000
+RECIPES_FILE_NAME = "recipes.yml"
+MKDOCS_FILE_NAME = "mkdocs.yml"
+SYSTEM_MESSAGE_FILE_NAME = "system_message.md"
+SYSTEM_MESSAGE_CONTEXT_FILE_NAME = "system_message_context.md"
 
 
 def load_environment(env_path: Path = None) -> None:
@@ -129,20 +133,20 @@ def main():
 
     client = get_api_client(api_key, endpoint)
     system_message = load_and_combine_system_messages(
-        base_dir / "system_message.md", base_dir / "system_message_context.md"
+        base_dir / SYSTEM_MESSAGE_FILE_NAME, base_dir / SYSTEM_MESSAGE_CONTEXT_FILE_NAME
     )
 
-    recipes_data = load_yaml(base_dir / "recipes.yml")
+    recipes_data = load_yaml(base_dir / RECIPES_FILE_NAME)
     if not isinstance(recipes_data, list):
-        raise ValueError("recipes.yml must contain a top-level list of prompt objects")
+        raise ValueError(f"{RECIPES_FILE_NAME} must contain a top-level list of prompt objects")
 
     docs_dir = base_dir / "docs"
     recipes = process_recipes(
         client, recipes_data, docs_dir, system_message, MODEL_NAME
     )
 
-    update_mkdocs_nav(recipes, base_dir / "mkdocs.yml")
-    print(f"✅ Injected {len(recipes)} recipes into nav section of mkdocs.yml")
+    update_mkdocs_nav(recipes, base_dir / MKDOCS_FILE_NAME)
+    print(f"✅ Injected {len(recipes)} recipes into nav section of {MKDOCS_FILE_NAME}.")
 
 
 if __name__ == "__main__":

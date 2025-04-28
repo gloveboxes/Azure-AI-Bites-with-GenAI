@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This article shows you how to perform a basic chat completion using the Azure Inference SDK in Python. You will learn how to use `SystemMessage`, `UserMessage`, and `AssistantMessage` to structure a conversation and get a response from an Azure OpenAI model.
+This article shows you how to perform a basic chat completion using the Azure Inference SDK for Python. You will learn how to use `SystemMessage`, `UserMessage`, and `AssistantMessage` to structure a conversation and get a response from an Azure OpenAI model.
 
 ## Prerequisites
 
@@ -18,8 +18,8 @@ Select your preferred operating system and follow the steps to set up your envir
     1. Open a terminal (such as **PowerShell**).
     2. Create a new project folder:
         ```powershell
-        mkdir azure-chat-demo
-        cd azure-chat-demo
+        mkdir azure-chat-sample
+        cd azure-chat-sample
         ```
     3. Set up a virtual environment:
         ```powershell
@@ -27,7 +27,7 @@ Select your preferred operating system and follow the steps to set up your envir
         ```
     4. Activate the virtual environment:
         ```powershell
-        .\.venv\Scripts\Activate
+        .venv\Scripts\Activate
         ```
     5. Install the required libraries:
         ```powershell
@@ -44,8 +44,8 @@ Select your preferred operating system and follow the steps to set up your envir
     1. Open a terminal.
     2. Create a new project folder:
         ```bash
-        mkdir azure-chat-demo
-        cd azure-chat-demo
+        mkdir azure-chat-sample
+        cd azure-chat-sample
         ```
     3. Set up a virtual environment:
         ```bash
@@ -65,11 +65,13 @@ Select your preferred operating system and follow the steps to set up your envir
         export AZURE_OPENAI_CHAT_KEY="<your-openai-key>"
         ```
 
+> **Note:** Replace the placeholders with your actual Azure OpenAI endpoint and key.
+
 ## 2. Main code components
 
 ### 2.1 Import required modules and set up the client
 
-This section imports the necessary modules and sets up the `ChatCompletionsClient` using your Azure OpenAI endpoint and key.
+This section imports the necessary modules and sets up the chat completions client using your Azure OpenAI endpoint and key.
 
 ```python
 import os
@@ -89,18 +91,17 @@ client = ChatCompletionsClient(
 
 ### 2.2 Compose the conversation with message types
 
-This section demonstrates how to use `SystemMessage`, `UserMessage`, and `AssistantMessage` to structure a conversation.
+This section demonstrates how to use `SystemMessage`, `UserMessage`, and `AssistantMessage` to structure a conversation. The system message sets the assistant's behavior, the user message asks a question, and the assistant message can be used to provide context or continue a conversation.
 
 ```python
 messages = [
     SystemMessage("You are a helpful assistant."),
     UserMessage("What is the capital of France?"),
-    AssistantMessage("The capital of France is Paris. How else can I help you?"),
-    UserMessage("What is the population of Paris?")
+    AssistantMessage("The capital of France is Paris. Do you want to know more?")
 ]
 ```
 
-### 2.3 Get the chat completion response
+### 2.3 Send the chat completion request and print the response
 
 This section sends the conversation to the model and prints the assistant's reply.
 
@@ -132,8 +133,7 @@ def main():
     messages = [
         SystemMessage("You are a helpful assistant."),
         UserMessage("What is the capital of France?"),
-        AssistantMessage("The capital of France is Paris. How else can I help you?"),
-        UserMessage("What is the population of Paris?")
+        AssistantMessage("The capital of France is Paris. Do you want to know more?")
     ]
 
     response = client.complete(messages=messages)
@@ -143,7 +143,7 @@ if __name__ == "__main__":
     main()
 ```
 
-This script sets up a conversation, sends it to the Azure OpenAI model, and prints the assistant's response.
+This script sets up the client, structures a conversation using the three message types, sends the request, and prints the assistant's response.
 
 ## 4. How to run the example code
 
@@ -154,10 +154,10 @@ This script sets up a conversation, sends it to the Azure OpenAI model, and prin
     python example.py
     ```
 
-The assistant's response will be printed to the terminal.
+You should see the assistant's response printed in the terminal.
 
 ## 5. Next steps
 
 - [Azure AI Inference SDK documentation](https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/ai/azure-ai-inference){:target="_blank"}
 - [Azure OpenAI Service documentation](https://learn.microsoft.com/azure/ai-services/openai/){:target="_blank"}
-- [How to use structured output with chat completions](https://github.com/Azure/azure-sdk-for-python/blob/main/sdk/ai/azure-ai-inference/samples/sample_chat_completions_with_structured_output.py){:target="_blank"}
+- [Explore the model catalog in Azure AI Foundry portal](https://learn.microsoft.com/azure/ai-foundry/how-to/model-catalog-overview){:target="_blank"}

@@ -5,7 +5,7 @@
 - title: "Basic Chat Completion"
   filename: "recipe_3_basic_chat.md"
   prompt: |
-    Generate basic chat completion code in Python using the Azure Inference SDK.
+    Generate basic chat completion code in Python using the Azure Inference SDK, Azure AI Inference SDK, and Key Authentication.
     Show how the SystemMessage, UserMessage and AssistantMessage are used.
 - title: "Migrate to Azure Inference Chat Completion"
   filename: "recipe_4_migrating.md"

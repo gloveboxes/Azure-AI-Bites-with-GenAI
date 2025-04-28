@@ -1,6 +1,9 @@
 - title: How to get a chat completions response from the service using a synchronous client and structured output
   fence_type: python
   url: https://raw.githubusercontent.com/Azure/azure-sdk-for-python/refs/heads/main/sdk/ai/azure-ai-inference/samples/sample_chat_completions_with_structured_output.py
+- title: Azure AI Inference client library for Python includes info on authentication
+  fence_type: markdown
+  url: https://raw.githubusercontent.com/Azure/azure-sdk-for-python/refs/heads/main/sdk/ai/azure-ai-inference/README.md
 - title: how to use basic agent operations with function tools from the Azure Agents service
   fence_type: python
   url: https://raw.githubusercontent.com/Azure/azure-sdk-for-python/refs/heads/main/sdk/ai/azure-ai-projects/samples/agents/sample_agents_functions_with_console_tracing.py

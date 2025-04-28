@@ -21,6 +21,13 @@ Create the following sections.
       - Activate the virtual environment,
       - Pip install yhe required libraries,
       - Set up environment variables and explain "Replace the placeholders with the actual values".
+  - Include a section named "Azure AI Services" with a brief explanation of the services.
+    - Provide a brief explanation of the Azure AI Foundry.
+    - Provide authentication information that matches the authentication type on the generated sample.
+      - Explain where to find the authentication key and endpoint.
+        - Select your deployment in the Azure AI Foundry portal, From the SDK dropdown, select **Azure Inference SDK** and select **Authentication type** Key Authentication. The **Key** and **Endpoint** are displayed.
+      - Explain where to find the **Project Connection String**.
+        - Select your Azure AI Foundry project in the Azure AI Foundry portal. The **Project Connection String** is displayed on the **Overview** tab in the **Project details** section.
   - Add a main code components section. For each component:
     - Provide a brief one paragraph explanation of the code,
     - Show the relevant code in fenced code blocks.
@@ -68,6 +75,7 @@ Create the following sections.
   - Use the following tab names:
     - === "Windows (PowerShell)"
     - === "Linux/macOS"
+- The complete code example should include docstrings for the module, functions and classes. 
 
 # Context
 ## Python Azure Libraries Dependencies with versions

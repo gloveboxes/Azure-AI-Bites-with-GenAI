@@ -19,9 +19,9 @@ Create the following sections.
       - Create a project folder,
       - Set up a virtual environment with `venv`,
       - Activate the virtual environment,
-      - Pip install yhe required libraries,
+      - Pip install the required libraries,
       - Set up environment variables and explain "Replace the placeholders with the actual values".
-  - Include a section named "Azure AI Services" with a brief explanation of the services.
+  - Include a section named "Authentication" with a brief explanation of the services.
     - Provide a brief explanation of the Azure AI Foundry.
     - Provide authentication information that matches the authentication type on the generated sample.
       - Explain using a blank line delimited list.

@@ -12,6 +12,9 @@ Create the following sections.
     - The Python version 3.8+,
     - Azure AI Foundry services,
     - Do not include Python libraries or Environment Variables in the prerequisites.
+  - Include a section named "Authentication" with a brief explanation of the services.
+    - Provide a brief explanation of the Azure AI Foundry.
+    - Show as a blank line delimited list of numbered steps.
   - Section named "Developer environment setup".
     - Include text to instruct the user to select their preferred operating system.
     - Include the following:
@@ -21,14 +24,6 @@ Create the following sections.
       - Activate the virtual environment,
       - Pip install the required libraries,
       - Set up environment variables and explain "Replace the placeholders with the actual values".
-  - Include a section named "Authentication" with a brief explanation of the services.
-    - Provide a brief explanation of the Azure AI Foundry.
-    - Provide authentication information that matches the authentication type on the generated sample.
-      - Explain using a blank line delimited list.
-      - Explain how to find the authentication key and endpoint.
-        - Select your deployment in the Azure AI Foundry portal, From the SDK dropdown, select **Azure Inference SDK** and select **Authentication type** Key Authentication. The **Key** and **Endpoint** are displayed.
-      - Explain where to find the **Project Connection String**.
-        - Select your Azure AI Foundry project in the Azure AI Foundry portal. The **Project Connection String** is displayed on the **Overview** tab in the **Project details** section.
   - Add a main code components section. For each component:
     - Provide a brief one paragraph explanation of the code,
     - Show the relevant code in fenced code blocks.
@@ -52,6 +47,7 @@ Create the following sections.
 - When generating the output, refer to the relevant code examples in the provided context.
 - List all required Python libraries, including their specific versions.
 - Ensure only required libraries are installed.
+- Ensure the Authentication section matches the authentication type for the generated sample.
 - Breakdown the examples into it's main components and include a brief explanation.
 
 # Reasoning Steps
@@ -89,3 +85,15 @@ Create the following sections.
 
 ## Inference Message Types
 from azure.ai.inference.models import SystemMessage, UserMessage, AssistantMessage
+
+## Azure AI Foundry Model Authentication
+AI Foundry supports several authentication methods.
+### Azure Inference SDK
+- For the AI Inference SDK, you can use Key Authentication.
+- Select your deployment in the Azure AI Foundry portal, From the SDK dropdown, select **Azure Inference SDK** and select **Authentication type** Key Authentication. The **Key** and **Endpoint** are displayed.
+### Project Connection String
+- The Project Connection String is used to connect to the Azure AI Foundry project.
+- Select your Azure AI Foundry project in the Azure AI Foundry portal. The **Project Connection String** is displayed on the **Overview** tab in the **Project details** section.
+### Azure OpenAI
+- For the Azure OpenAI SDK, you can use Key Authentication.
+- Select your deployment in the Azure AI Foundry portal, From the SDK dropdown, select **Azure OpenAI** and select **Authentication type** Key Authentication. The **Key** and **Endpoint** are displayed.

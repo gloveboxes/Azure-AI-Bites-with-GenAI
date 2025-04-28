@@ -20,5 +20,12 @@
       - Europe: USD 120000
       - China: USD 150000
     Instruct the user to create a sales_data.csv file.
+- title: "Evaluate your Agent"
+  filename: "recipe_6_evaluations.md"
+  prompt: |
+    Show how you can "Evaluate" your Agents. In the example a simple example of how to:
+    -	Generate eval dataset
+    -	Local eval run
+    -	Online eval run
 
     

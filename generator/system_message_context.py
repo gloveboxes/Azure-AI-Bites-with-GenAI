@@ -28,6 +28,7 @@ for entry in entries:
     url = entry["url"]
 
     try:
+        print(f"Fetching {title}...")
         response = requests.get(url, timeout=10)
         response.raise_for_status()
         code = response.text

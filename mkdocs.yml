@@ -5,6 +5,7 @@ nav:
 - Basic Chat Completion: recipe_3_basic_chat.md
 - Migrate to Azure Inference Chat Completion: recipe_4_migrating.md
 - Generate an Sales by Region Pie Chart: recipe_5_generate_image.md
+- Evaluate your Agent: recipe_6_evaluations.md
 plugins:
 - glightbox
 - include-markdown

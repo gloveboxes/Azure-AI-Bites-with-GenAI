@@ -76,6 +76,7 @@ Create the following sections.
 - azure-identity 1.21.0
 - azure-storage-blob 12.25.1
 - azure-ai-projects 1.0.0b9
+- azure-ai-evaluation 1.5.0
 
 ## Inference Message Types
 from azure.ai.inference.models import SystemMessage, UserMessage, AssistantMessage

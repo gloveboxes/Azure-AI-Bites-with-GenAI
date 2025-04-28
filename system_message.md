@@ -24,7 +24,8 @@ Create the following sections.
   - Include a section named "Azure AI Services" with a brief explanation of the services.
     - Provide a brief explanation of the Azure AI Foundry.
     - Provide authentication information that matches the authentication type on the generated sample.
-      - Explain using a list how to find the authentication key and endpoint.
+      - Explain using a blank line delimited list.
+      - Explain how to find the authentication key and endpoint.
         - Select your deployment in the Azure AI Foundry portal, From the SDK dropdown, select **Azure Inference SDK** and select **Authentication type** Key Authentication. The **Key** and **Endpoint** are displayed.
       - Explain where to find the **Project Connection String**.
         - Select your Azure AI Foundry project in the Azure AI Foundry portal. The **Project Connection String** is displayed on the **Overview** tab in the **Project details** section.

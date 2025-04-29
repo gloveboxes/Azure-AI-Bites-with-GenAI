@@ -9,7 +9,7 @@ The Azure AI Bites Generator is a tool designed to help you create bite-sized co
 
 ## Published Docs
 
-The MkDocs for this project are published at [Azure AI Bites](https://gloveboxes.github.io/getting-started-samples/).
+The MkDocs for this project are published at [Azure AI Bites](https://gloveboxes.github.io/Azure-AI-Bites-with-GenAI/).
 
 ## Prerequisites
 - Python 3.x

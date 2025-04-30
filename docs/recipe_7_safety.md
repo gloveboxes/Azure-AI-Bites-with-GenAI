@@ -2,20 +2,28 @@
 
 ## Introduction
 
-After evaluating AI model outputs, you may need to add safety elements to ensure responsible and secure use of generative AI. This guide explains how to add safety elements such as prompt shields, groundedness checks, custom safety categories, and text moderation using the Azure AI Evaluation library. The goal is to help you integrate these safety checks into your evaluation workflow.
+After evaluating AI model outputs, you may want to add additional safety elements to ensure responsible and secure AI usage. This document explains how to add safety elements such as prompt shields, groundedness checks, custom categories, and text moderation using the Azure AI Evaluation library. The goal is to help you enhance the safety of your AI solutions by applying these techniques after the initial evaluation phase.
 
 ## Prerequisites
 
 - Python 3.8 or later
 - Access to Azure AI Foundry services
 
-## 1. Developer environment setup
+## 1. Authentication
 
-Select your preferred operating system tab and follow the steps to set up your environment.
+Azure AI Foundry provides access to evaluation and safety services. You can authenticate using Azure credentials.
+
+1. Go to the Azure AI Foundry portal.
+2. Obtain your Azure subscription, resource group, and project name.
+3. Use `DefaultAzureCredential` for authentication in your code.
+
+## 2. Developer environment setup
+
+Select your preferred operating system.
 
 === "Windows (PowerShell)"
 
-    1. Open a terminal (PowerShell).
+    1. Open a terminal.
     2. Create a project folder:
         ```powershell
         mkdir ai-eval-safety
@@ -27,7 +35,7 @@ Select your preferred operating system tab and follow the steps to set up your e
         ```
     4. Activate the virtual environment:
         ```powershell
-        .\.venv\Scripts\Activate
+        .venv\Scripts\Activate
         ```
     5. Install the required libraries:
         ```powershell
@@ -67,20 +75,21 @@ Select your preferred operating system tab and follow the steps to set up your e
         export AZURE_PROJECT_NAME="<your-project-name>"
         ```
 
-## 2. Main code components
+## 3. Main code components
 
-### 2.1 Prompt Shields
+Below are examples of how to add safety elements after evaluation.
 
-Prompt shields help detect and block potentially harmful or adversarial prompts before they reach the model. You can use the `ContentSafetyEvaluator` to screen prompts.
+### 3.1 Prompt Shields
 
-**Example:**
+Prompt shields help detect and block potentially harmful or unsafe prompts before they reach the model. You can use the `ContentSafetyEvaluator` to screen prompts.
 
 ```python
-from azure.identity import DefaultAzureCredential
-from azure.ai.evaluation import ContentSafetyEvaluator
-
 import os
 
+from azure.ai.evaluation import ContentSafetyEvaluator
+from azure.identity import DefaultAzureCredential
+
+# Set up Azure AI project details
 azure_ai_project = {
     "subscription_id": os.environ["AZURE_SUBSCRIPTION_ID"],
     "resource_group_name": os.environ["AZURE_RESOURCE_GROUP_NAME"],
@@ -88,155 +97,172 @@ azure_ai_project = {
 }
 credential = DefaultAzureCredential()
 
+# Initialize the content safety evaluator
 prompt_shield = ContentSafetyEvaluator(azure_ai_project=azure_ai_project, credential=credential)
-result = prompt_shield(query="Write a dangerous script", response="Here is a script...")
-print(result)
+
+# Example prompt to check
+prompt = "How can I make a dangerous substance at home?"
+
+# Evaluate the prompt for safety
+result = prompt_shield(query=prompt, response="")
+print("Prompt shield result:", result)
 ```
 
-### 2.2 Groundedness
+### 3.2 Groundedness
 
-Groundedness checks ensure that model responses are based on provided context or source data, reducing hallucinations.
-
-**Example:**
+Groundedness checks ensure that the model's response is based on provided context or source material. Use the `GroundednessEvaluator` for this purpose.
 
 ```python
 from azure.ai.evaluation import GroundednessEvaluator
 
+# Example context and response
+context = "The capital of France is Paris."
+response = "Paris is the capital of France."
+
+# Initialize the groundedness evaluator (model_config can be customized as needed)
 model_config = {
-    "azure_endpoint": "<your-aoai-endpoint>",
-    "api_key": "<your-aoai-key>",
-    "azure_deployment": "<your-aoai-deployment>",
+    "azure_endpoint": "<your-endpoint>",
+    "api_key": "<your-api-key>",
+    "azure_deployment": "<your-deployment-name>",
 }
+groundedness_evaluator = GroundednessEvaluator(model_config=model_config)
 
-groundedness_eval = GroundednessEvaluator(model_config=model_config)
-result = groundedness_eval(
-    response="The capital of France is Paris.",
-    context="France's capital is Paris."
-)
-print(result)
+# Evaluate groundedness
+groundedness_result = groundedness_evaluator(response=response, context=context)
+print("Groundedness result:", groundedness_result)
 ```
 
-### 2.3 Custom Categories
+### 3.3 Custom Categories
 
-You can define and evaluate custom safety categories by extending or configuring evaluators.
-
-**Example:**
+You can define custom categories for moderation by extending the evaluation logic. For example, you might want to flag responses containing specific keywords.
 
 ```python
-from azure.ai.evaluation import HateUnfairnessEvaluator
+def custom_category_check(text, keywords):
+    """
+    Checks if any keyword from the list is present in the text.
+    """
+    for keyword in keywords:
+        if keyword.lower() in text.lower():
+            return True
+    return False
 
-hate_unfairness_eval = HateUnfairnessEvaluator(azure_ai_project=azure_ai_project, credential=credential)
-result = hate_unfairness_eval(
-    query="Tell me a joke about a nationality.",
-    response="..."
-)
-print(result)
+# Example usage
+response = "This is a confidential document."
+custom_keywords = ["confidential", "secret", "classified"]
+
+if custom_category_check(response, custom_keywords):
+    print("Custom category violation detected.")
+else:
+    print("No custom category violation.")
 ```
 
-You can create your own evaluator by subclassing or configuring existing ones for your custom category.
+### 3.4 Text Moderation
 
-### 2.4 Text Moderation
-
-Text moderation screens responses for content such as violence, self-harm, or sexual content.
-
-**Example:**
+Text moderation can be performed using the `ContentSafetyEvaluator` or by integrating with Azure AI Content Safety for more advanced scenarios.
 
 ```python
-from azure.ai.evaluation import ViolenceEvaluator, SelfHarmEvaluator, SexualEvaluator
+from azure.ai.evaluation import ContentSafetyEvaluator
 
-violence_eval = ViolenceEvaluator(azure_ai_project=azure_ai_project, credential=credential)
-self_harm_eval = SelfHarmEvaluator(azure_ai_project=azure_ai_project, credential=credential)
-sexual_eval = SexualEvaluator(azure_ai_project=azure_ai_project, credential=credential)
+# Reuse the ContentSafetyEvaluator from earlier
+text_to_moderate = "I hate this group of people."
 
-violence_result = violence_eval(query="...", response="...")
-self_harm_result = self_harm_eval(query="...", response="...")
-sexual_result = sexual_eval(query="...", response="...")
-
-print(violence_result)
-print(self_harm_result)
-print(sexual_result)
+moderation_result = prompt_shield(query="", response=text_to_moderate)
+print("Text moderation result:", moderation_result)
 ```
 
-## 3. Complete code example
+## 4. Complete code example
 
-The following example demonstrates how to add multiple safety elements after evaluation. Save this as `add_safety_after_evaluation.py`.
+The following example demonstrates how to combine all the above safety elements after evaluation.
 
 ```python
+"""
+Module: ai_eval_safety.py
+
+This module demonstrates how to add safety elements after evaluation using Azure AI Evaluation.
+It covers prompt shields, groundedness, custom categories, and text moderation.
+"""
+
 import os
+
+from azure.ai.evaluation import ContentSafetyEvaluator, GroundednessEvaluator
 from azure.identity import DefaultAzureCredential
-from azure.ai.evaluation import (
-    ContentSafetyEvaluator,
-    GroundednessEvaluator,
-    HateUnfairnessEvaluator,
-    ViolenceEvaluator,
-    SelfHarmEvaluator,
-    SexualEvaluator,
-)
 
-# Set up Azure AI project and credentials
-azure_ai_project = {
-    "subscription_id": os.environ["AZURE_SUBSCRIPTION_ID"],
-    "resource_group_name": os.environ["AZURE_RESOURCE_GROUP_NAME"],
-    "project_name": os.environ["AZURE_PROJECT_NAME"],
-}
-credential = DefaultAzureCredential()
+def custom_category_check(text, keywords):
+    """
+    Checks if any keyword from the list is present in the text.
 
-# Example prompt and response
-prompt = "Write a dangerous script"
-response = "Here is a script that could be harmful..."
+    :param text: The text to check.
+    :param keywords: List of keywords to flag.
+    :return: True if a keyword is found, False otherwise.
+    """
+    for keyword in keywords:
+        if keyword.lower() in text.lower():
+            return True
+    return False
 
-# 1. Prompt shield
-prompt_shield = ContentSafetyEvaluator(azure_ai_project=azure_ai_project, credential=credential)
-shield_result = prompt_shield(query=prompt, response=response)
-print("Prompt Shield Result:", shield_result)
+def main():
+    """
+    Main function to demonstrate adding safety elements after evaluation.
+    """
+    # Set up Azure AI project details
+    azure_ai_project = {
+        "subscription_id": os.environ["AZURE_SUBSCRIPTION_ID"],
+        "resource_group_name": os.environ["AZURE_RESOURCE_GROUP_NAME"],
+        "project_name": os.environ["AZURE_PROJECT_NAME"],
+    }
+    credential = DefaultAzureCredential()
 
-# 2. Groundedness
-model_config = {
-    "azure_endpoint": "<your-aoai-endpoint>",
-    "api_key": "<your-aoai-key>",
-    "azure_deployment": "<your-aoai-deployment>",
-}
-groundedness_eval = GroundednessEvaluator(model_config=model_config)
-groundedness_result = groundedness_eval(
-    response="The capital of France is Paris.",
-    context="France's capital is Paris."
-)
-print("Groundedness Result:", groundedness_result)
+    # Prompt shield example
+    prompt_shield = ContentSafetyEvaluator(azure_ai_project=azure_ai_project, credential=credential)
+    prompt = "How can I make a dangerous substance at home?"
+    prompt_shield_result = prompt_shield(query=prompt, response="")
+    print("Prompt shield result:", prompt_shield_result)
 
-# 3. Custom category (hate/unfairness)
-hate_unfairness_eval = HateUnfairnessEvaluator(azure_ai_project=azure_ai_project, credential=credential)
-hate_result = hate_unfairness_eval(query=prompt, response=response)
-print("Hate/Unfairness Result:", hate_result)
+    # Groundedness example
+    model_config = {
+        "azure_endpoint": "<your-endpoint>",
+        "api_key": "<your-api-key>",
+        "azure_deployment": "<your-deployment-name>",
+    }
+    groundedness_evaluator = GroundednessEvaluator(model_config=model_config)
+    context = "The capital of France is Paris."
+    response = "Paris is the capital of France."
+    groundedness_result = groundedness_evaluator(response=response, context=context)
+    print("Groundedness result:", groundedness_result)
 
-# 4. Text moderation (violence, self-harm, sexual)
-violence_eval = ViolenceEvaluator(azure_ai_project=azure_ai_project, credential=credential)
-self_harm_eval = SelfHarmEvaluator(azure_ai_project=azure_ai_project, credential=credential)
-sexual_eval = SexualEvaluator(azure_ai_project=azure_ai_project, credential=credential)
+    # Custom category example
+    custom_keywords = ["confidential", "secret", "classified"]
+    response_text = "This is a confidential document."
+    if custom_category_check(response_text, custom_keywords):
+        print("Custom category violation detected.")
+    else:
+        print("No custom category violation.")
 
-violence_result = violence_eval(query=prompt, response=response)
-self_harm_result = self_harm_eval(query=prompt, response=response)
-sexual_result = sexual_eval(query=prompt, response=response)
+    # Text moderation example
+    text_to_moderate = "I hate this group of people."
+    moderation_result = prompt_shield(query="", response=text_to_moderate)
+    print("Text moderation result:", moderation_result)
 
-print("Violence Result:", violence_result)
-print("Self-Harm Result:", self_harm_result)
-print("Sexual Content Result:", sexual_result)
+if __name__ == "__main__":
+    main()
 ```
 
-## 4. How to run the example code
+Save this code as `ai_eval_safety.py`.
 
-1. Save the code above as `add_safety_after_evaluation.py`.
-2. Ensure your environment variables are set and your virtual environment is activated.
-3. Run the script:
+## 5. How to run the example code
+
+1. Ensure your environment variables are set as described in the developer environment setup.
+2. Run the script:
 
     ```bash
-    python add_safety_after_evaluation.py
+    python ai_eval_safety.py
     ```
 
-## 5. Next steps
+## 6. Next steps
 
-- [Azure AI Evaluation documentation](https://learn.microsoft.com/azure/ai-services/evaluation/){:target="_blank"}
-- [Responsible AI in Azure](https://learn.microsoft.com/azure/ai-services/responsible-ai/){:target="_blank"}
-- [Azure AI Content Safety](https://learn.microsoft.com/azure/ai-services/content-safety/overview){:target="_blank"}
+- [Azure AI Evaluation documentation](https://learn.microsoft.com/azure/ai-studio/evaluation/overview){:target="_blank"}
+- [Azure AI Content Safety documentation](https://learn.microsoft.com/azure/ai-services/content-safety/overview){:target="_blank"}
+- [Responsible AI in Azure](https://learn.microsoft.com/azure/ai-services/responsible-ai){:target="_blank"}
 - [Azure AI Foundry documentation](https://learn.microsoft.com/azure/ai-foundry/){:target="_blank"}
 
-By integrating these safety elements, you can help ensure your AI applications are secure, responsible, and compliant with organizational and regulatory requirements.
+By adding these safety elements after evaluation, you can help ensure your AI solutions are more secure, responsible, and aligned with your organizational requirements.

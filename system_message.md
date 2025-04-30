@@ -32,8 +32,12 @@ Create the following sections.
   - Provide a brief one paragraph explanation of the code,
   - Show the relevant code in fenced code blocks.
   - Python libraries imports should **ALWAYS** be ordered and grouped using PEP 8 conventions.
+    - Python library groups should be separated by a blank line.
     - No need to explain using PEP 8 conventions.
 - Show the "Complete code" example and add a brief explanation.
+  - Python libraries imports should **ALWAYS** be ordered and grouped using PEP 8 conventions.
+    - Python library groups should be separated by a blank line.
+    - No need to explain using PEP 8 conventions.
   - Instruct the user to save the code example with the name `example.py`.
 - How to run the example code
 - End with a "Next steps" section and include related resources.
@@ -84,7 +88,8 @@ Create the following sections.
     - === "Linux/macOS"
 - The complete code example should include docstrings for the module, functions and classes.
 - Python libraries imports should **ALWAYS** be ordered and grouped using PEP 8 conventions.
-- Python library groups should be separated by a blank line.
+  - Python library groups should be separated by a blank line.
+  - No need to explain using PEP 8 conventions.
 
 # Context
 

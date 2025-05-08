@@ -1,13 +1,18 @@
 - title: "Getting started with Azure AI Foundry"
   filename: "recipe_1_auzure_ai_foundary.md"
   prompt: |
+    This content is for beginners who are new to Azure AI Foundry.
     Introduce the Azure AI Foundry and its components.
     -	Azure AI Foundry
+
     -	Azure Inference SDK
     -	Azure OpenAI Service
+    - include any existing images or diagrams that are available and help explain the components.
+      - format the images as markdown prefiexed with [](){:target="_blank"}
     Add a section on different ways to deploy models in Azure AI Foundry.
       - preferred deployment is serverless pas as you go.
-    Add a section on differt authentication methods for for apps to access models in Azure AI Foundry.
+    Add a section on about Hubs and Projects
+    Add a section on different authentication methods for for apps to access models in Azure AI Foundry.
     Add a section with a very simple example of using each type of authentication method.
 - title: "Setting up model deployment in Azure AI Foundry"
   filename: "recipe_2_getting_started_ai_foundry.md"

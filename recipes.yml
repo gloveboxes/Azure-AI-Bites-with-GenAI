@@ -1,9 +1,10 @@
 - title: "Getting started with Azure AI Foundry"
-  filename: "recipe_1_auzure_ai_foundary.md"
+  filename: "recipe_1_azure_ai_foundary.md"
   prompt: |
     This content is for beginners who are new to Azure AI Foundry.
     Formating content as markdown.
       - Format all links as markdown links [](){:target="_blank"}
+    Don't include any images or diagrams.
     Introduce the Azure AI Foundry and its components.
       -	Azure AI Foundry
       - Include an introduction to Hubs and Projects for organizing your work, security and access control.
@@ -12,7 +13,7 @@
       - Preferred deployment is serverless pay as you go. Wide range of models to choose from.
       - Managed Computer often leading edge models, early availability.
       - OpenAI Service is a managed service for OpenAI models.
-    Add a section on different authentication methods for for apps to access models in Azure AI Foundry.
+    Add a section on different authentication methods for for apps to access models in Azure AI Foundry. Add references to the Azure documentation for each method.
       - Project Connection String
       - API Key
       - Microsoft Entra ID

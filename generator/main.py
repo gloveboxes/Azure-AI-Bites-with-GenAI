@@ -15,7 +15,7 @@ from azure.core.credentials import AzureKeyCredential
 MODEL_NAME = "gpt-4.1"
 TEMPERATURE = 0.1
 TOP_P = 0.1
-MAX_TOKENS = 30000
+MAX_TOKENS = 50000
 RECIPES_FILE_NAME = "recipes.yml"
 MKDOCS_FILE_NAME = "mkdocs.yml"
 SYSTEM_MESSAGE_FILE_NAME = "system_message.md"

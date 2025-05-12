@@ -4,6 +4,7 @@
     This content is for beginners who are new to Azure AI Foundry.
     Formating content as markdown.
       - Format all links as markdown links [](){:target="_blank"}
+      - Verify all links are correct and working.
     Don't include any images or diagrams.
     Introduce the Azure AI Foundry and its components.
       -	Azure AI Foundry
@@ -13,10 +14,13 @@
       - Preferred deployment is serverless pay as you go. Wide range of models to choose from.
       - Managed Computer often leading edge models, early availability.
       - OpenAI Service is a managed service for OpenAI models.
-    Add a section on different authentication methods for for apps to access models in Azure AI Foundry. Add references to the Azure documentation for each method.
-      - Project Connection String
-      - API Key
-      - Microsoft Entra ID
+    Add a section on different authentication methods for for apps to access models in Azure AI Foundry. 
+      - Add references to the Azure documentation for each authentication method.
+      - Include information about where to get keys, Project Connection String, and how to enable Microsoft Entra ID for each sample.
+      - Authentication methods:
+        - Project Connection String
+        - API Key
+        - Microsoft Entra ID
     Include a section on SDKs
       -	Azure Inference SDK
       -	Azure OpenAI Service
@@ -29,21 +33,34 @@
 - title: "Basic Chat Completion"
   filename: "recipe_3_basic_chat.md"
   prompt: |
-    Generate basic chat completion code in Python using the Azure Inference SDK, Azure AI Inference SDK, and Key Authentication.
-    Show how the SystemMessage, UserMessage and AssistantMessage are used.
+    Generate basic chat completion code in Python using the Azure Inference SDK, Azure AI 
+    Add an Authentication section:
+    - This example uses the Inference SDK, and Key Authentication.
+    - Include a brief description of the Key Authentication with an Endpoint and how to get it.
+    Add a Code Sample section:
+    - Show how the SystemMessage, UserMessage and AssistantMessage are used.
 - title: "Migrate to Azure Inference Chat Completion"
   filename: "recipe_4_migrating.md"
   prompt: |
     How to migrate from OpenAI Chat Completion to an Azure Inference Chat Completion.
     After the Developer Environment Setup section, add a section named API Mapping with a table mapping the parameters for the OpenAI ChatCompletion API and the Azure Inference API.
-    Show code examples of both OpenAI Chat Completion and Azure Inference.
+    Add an authentication section:
+    - This example uses the Inference SDK, and Key Authentication.
+    - Include a brief description of the Key Authentication with an Endpoint and how to get it.
+    Add a Code Sample section:
+    - Show code examples of both OpenAI Chat Completion and Azure Inference.
 - title: "Generate an Sales by Region Pie Chart"
   filename: "recipe_5_generate_image.md"
   prompt: |
     Generate sales by region pie chart using the Code Interpreter with this data:
       - Europe: USD 120000
       - China: USD 150000
+    Add an authentication section:
+    - This example uses a project connection string, and Microsoft Entra ID authentication.
+    - Include a brief description of the project connection string and Microsoft Entra ID authentication and how to get them.
     Instruct the user to create a sales_data.csv file.
+    Add a Code Sample section:
+    - Show code example of how to use the Code Interpreter to generate a pie chart.
 - title: "Evaluate your Agent"
   filename: "recipe_6_evaluations.md"
   prompt: |
@@ -51,6 +68,9 @@
     -	Generate eval dataset
     -	Local eval run
     -	Online eval run
+    Add an authentication section:
+    - This example uses a project connection string, and Microsoft Entra ID authentication.
+    - Include a brief description of the project connection string and Microsoft Entra ID authentication and how to get them.
 - title: Implementing safety systems with Azure AI Content Safety
   filename: "recipe_7_safety.md"
   prompt: |
@@ -59,4 +79,6 @@
     -	Groundedness
     -	Custom categories
     -	Text moderation
-
+    Add an authentication section:
+    - This example uses a project connection string, and Microsoft Entra ID authentication.
+    - Include a brief description of the project connection string and Microsoft Entra ID authentication and how to get them.

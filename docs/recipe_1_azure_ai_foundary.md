@@ -1,145 +1,166 @@
-# Introduction to Azure AI Foundry and Its Components
+# Introduction to Azure AI Foundry for Beginners
 
-## Introduction
+Azure AI Foundry is a platform that helps you discover, deploy, and use a wide range of AI models for your applications. It provides a unified experience for working with models from Microsoft, OpenAI, and other leading providers. Azure AI Foundry is designed to make it easy for you to organize your work, manage security, and control access to your AI resources.
 
-Azure AI Foundry is a platform that helps you discover, deploy, and manage a wide range of AI models for your applications. It provides a unified experience for working with models from Microsoft, OpenAI, and other leading providers. Azure AI Foundry is designed to make it easy for you to organize your work, control access, and deploy models using different compute options.
+## Introduction to Azure AI Foundry Components
 
-This guide introduces the main components of Azure AI Foundry, explains the different ways to deploy models, describes authentication methods, and provides a simple example for each authentication type.
+Azure AI Foundry is built around several key components that help you manage and use AI models effectively:
 
-## Azure AI Foundry Components
+### Hubs
 
-Azure AI Foundry is organized around two main concepts: **Hubs** and **Projects**.
+A **Hub** is a top-level resource in Azure AI Foundry. It acts as a central point for managing security, networking, and access control for your AI resources. Hubs allow you to:
 
-- **Hubs**: Hubs are the top-level containers in Azure AI Foundry. They provide a secure boundary for organizing your AI resources, managing network access, and applying security policies. Hubs help you control who can access your AI assets and how they are used.
+- Organize your AI resources across teams and projects.
+- Set up network isolation and security policies.
+- Control who can access and manage resources within the hub.
 
-- **Projects**: Projects are created within a hub and are used to group related AI resources, such as model deployments, data, and experiments. Projects make it easier to manage access control, track usage, and collaborate with others on specific AI solutions.
+### Projects
 
-For more information, see [Azure AI Foundry documentation](https://learn.microsoft.com/azure/ai-foundry/){:target="_blank"}.
+A **Project** is a workspace within a hub where you can organize your AI assets, such as models, datasets, and deployments. Projects help you:
 
-## Model Deployment Options in Azure AI Foundry
+- Group related resources for a specific application or team.
+- Manage access control at a more granular level.
+- Track usage and billing for your AI workloads.
 
-Azure AI Foundry offers several ways to deploy models, each suited to different needs:
+For more information, see [Explore foundation models in Azure AI Foundry portal](https://learn.microsoft.com/azure/ai-foundry/how-to/model-catalog-overview){:target="_blank"}.
 
-- **Serverless API (Pay-as-you-go)**:  
-  This is the preferred deployment option for most users. Serverless APIs allow you to access a wide range of models without managing infrastructure. You pay only for what you use, making it cost-effective and scalable. Many popular models are available for serverless deployment.
+## Ways to Deploy Models in Azure AI Foundry
 
-- **Managed Compute**:  
-  Managed compute deployments are often used for leading-edge or early-availability models. With this option, models are deployed to dedicated virtual machines managed by Azure. This provides more control over the environment and is suitable for advanced scenarios.
+Azure AI Foundry offers several deployment options to suit different needs:
 
-- **Azure OpenAI Service**:  
-  The Azure OpenAI Service is a managed service for deploying and using OpenAI models, such as GPT-4 and GPT-4o. It provides enterprise-grade security, compliance, and integration with other Azure services.
+### 1. Serverless API (Pay-As-You-Go)
 
-For more details, see [Model deployment options in Azure AI Foundry](https://learn.microsoft.com/azure/ai-foundry/how-to/model-catalog-overview){:target="_blank"}.
+- **Preferred deployment method** for most users.
+- Provides access to a wide range of models from various providers.
+- Models are hosted and managed by Microsoft; you only pay for what you use (per token).
+- No need to manage infrastructure.
+- Fast and easy to get started.
+
+Learn more: [Deploy models as serverless APIs](https://learn.microsoft.com/azure/ai-foundry/how-to/deploy-models-serverless){:target="_blank"}
+
+### 2. Managed Compute
+
+- Allows you to deploy models to dedicated virtual machines managed by Azure.
+- Often used for leading-edge models or early availability releases.
+- Provides more control over compute resources and network isolation.
+- Suitable for advanced scenarios or when you need custom configurations.
+
+Learn more: [Deploy models with managed compute](https://learn.microsoft.com/azure/ai-foundry/how-to/deploy-models-managed){:target="_blank"}
+
+### 3. Azure OpenAI Service
+
+- A managed service for OpenAI models (such as GPT-4, GPT-4o, etc.).
+- Provides enterprise-grade security, compliance, and support.
+- Integrates with Azure AI Foundry for unified management.
+
+Learn more: [What is Azure OpenAI Service?](https://learn.microsoft.com/azure/ai-services/openai/overview){:target="_blank"}
 
 ## Authentication Methods for Accessing Models
 
-When building applications that use models deployed in Azure AI Foundry, you need to authenticate your app. Azure AI Foundry supports several authentication methods:
+To use models deployed in Azure AI Foundry, your applications need to authenticate. Azure AI Foundry supports several authentication methods:
 
-- **Project Connection String**:  
-  A project connection string is a unique string that provides access to a specific project in Azure AI Foundry. It is commonly used for SDKs and tools that need to connect to a project.  
-  Learn more: [Project connection string documentation](https://learn.microsoft.com/azure/ai-foundry/how-to/project-connection-string){:target="_blank"}
+### 1. Project Connection String
 
-- **API Key**:  
-  API keys are used to authenticate requests to model endpoints. You can generate and manage API keys in the Azure AI Foundry portal.  
-  Learn more: [API key authentication](https://learn.microsoft.com/azure/ai-foundry/how-to/authentication-keys){:target="_blank"}
+- Used to connect to an Azure AI Foundry project.
+- The connection string is available in the **Overview** tab of your project in the Azure AI Foundry portal.
+- Suitable for SDKs and tools that support project-based authentication.
 
-- **Microsoft Entra ID (formerly Azure Active Directory)**:  
-  Microsoft Entra ID provides secure, identity-based authentication for enterprise applications. It is recommended for production scenarios where you need to manage access at scale.  
-  Learn more: [Microsoft Entra ID authentication](https://learn.microsoft.com/azure/ai-foundry/how-to/authentication-entra-id){:target="_blank"}
+Learn more: [Get the project connection string](https://learn.microsoft.com/azure/ai-foundry/how-to/project-connection-string){:target="_blank"}
 
-## SDKs for Working with Azure AI Foundry
+### 2. API Key
 
-Azure AI Foundry supports multiple SDKs to help you integrate AI models into your applications:
+- Used for authenticating directly to a model endpoint.
+- API keys are available in the Azure AI Foundry portal under your model deployment's details.
+- Commonly used for serverless API and Azure OpenAI Service deployments.
 
-- **Azure Inference SDK**:  
-  The Azure Inference SDK is a Python library that provides a unified interface for accessing models deployed in Azure AI Foundry, including serverless and managed compute endpoints.  
-  [Azure Inference SDK documentation](https://aka.ms/aiservices/inference){:target="_blank"}
+Learn more: [Manage API keys for Azure AI Foundry](https://learn.microsoft.com/azure/ai-foundry/how-to/manage-keys){:target="_blank"}
 
-- **Azure OpenAI Service SDK**:  
-  The Azure OpenAI Service SDK is designed for working specifically with OpenAI models deployed in Azure. It provides features for chat completions, embeddings, and more.  
-  [Azure OpenAI Service documentation](https://learn.microsoft.com/azure/ai-services/openai/overview){:target="_blank"}
+### 3. Microsoft Entra ID (formerly Azure Active Directory)
+
+- Provides secure, identity-based authentication for enterprise scenarios.
+- Allows you to use role-based access control (RBAC) and integrate with your organization's identity provider.
+- To enable Entra ID authentication, configure your deployment to allow it in the Azure AI Foundry portal.
+
+Learn more: [Enable Microsoft Entra ID authentication](https://learn.microsoft.com/azure/ai-foundry/how-to/enable-entra-id-authentication){:target="_blank"}
+
+## Where to Get Authentication Information
+
+- **Project Connection String:**  
+  Go to your project in the Azure AI Foundry portal. The connection string is shown on the **Overview** tab in the **Project details** section.
+
+- **API Key:**  
+  Go to your model deployment in the Azure AI Foundry portal. Under the **SDK** dropdown, select your preferred SDK and authentication type to view the key and endpoint.
+
+- **Microsoft Entra ID:**  
+  Enable Entra ID authentication in your deployment settings in the Azure AI Foundry portal. You may need to configure permissions and assign roles to users or applications.
+
+## SDKs for Azure AI Foundry
+
+Azure AI Foundry supports several SDKs to help you interact with models and deployments:
+
+### Azure Inference SDK
+
+- Unified SDK for accessing models deployed via serverless API or managed compute.
+- Supports chat completions, embeddings, and more.
+- Works with a wide range of models from different providers.
+
+Learn more: [Azure AI Inference client library for Python](https://aka.ms/aiservices/inference){:target="_blank"}
+
+### Azure OpenAI Service SDK
+
+- Official SDK for working with Azure OpenAI Service models.
+- Provides advanced features and full support for OpenAI models.
+
+Learn more: [Azure OpenAI client library for Python](https://learn.microsoft.com/azure/ai-services/openai/quickstart-client-library){:target="_blank"}
 
 ## Simple Authentication Examples
 
-Below are very simple Python examples for each authentication method. These examples use the Azure Inference SDK to send a prompt to a deployed model.
+Below are very simple Python examples for each authentication method. Replace the placeholders with your actual values.
 
 ### 1. Project Connection String
 
 ```python
-import os
 from azure.ai.projects import AIProjectClient
 from azure.identity import DefaultAzureCredential
 
-# Set your project connection string as an environment variable
-project_connection_string = os.environ["PROJECT_CONNECTION_STRING"]
-
-# Authenticate using the project connection string
-client = AIProjectClient.from_connection_string(
+project_client = AIProjectClient.from_connection_string(
     credential=DefaultAzureCredential(),
-    conn_str=project_connection_string
+    conn_str="<PROJECT_CONNECTION_STRING>"
 )
-
-# Example: List agents in the project
-agents = client.agents.list_agents()
-print(agents)
 ```
 
 ### 2. API Key
 
 ```python
-import os
 from azure.ai.inference import ChatCompletionsClient
-from azure.ai.inference.models import SystemMessage, UserMessage
 from azure.core.credentials import AzureKeyCredential
 
-# Set your endpoint and API key as environment variables
-endpoint = os.environ["AZURE_AI_ENDPOINT"]
-api_key = os.environ["AZURE_AI_KEY"]
-
-# Authenticate using API key
 client = ChatCompletionsClient(
-    endpoint=endpoint,
-    credential=AzureKeyCredential(api_key)
+    endpoint="<ENDPOINT_URL>",
+    credential=AzureKeyCredential("<API_KEY>")
 )
-
-response = client.complete(
-    messages=[
-        SystemMessage("You are a helpful assistant."),
-        UserMessage("How many feet are in a mile?"),
-    ]
-)
-print(response.choices[0].message.content)
 ```
 
 ### 3. Microsoft Entra ID
 
 ```python
-import os
 from azure.ai.inference import ChatCompletionsClient
-from azure.ai.inference.models import SystemMessage, UserMessage
 from azure.identity import DefaultAzureCredential
 
-# Set your endpoint as an environment variable
-endpoint = os.environ["AZURE_AI_ENDPOINT"]
-
-# Authenticate using Microsoft Entra ID
 client = ChatCompletionsClient(
-    endpoint=endpoint,
-    credential=DefaultAzureCredential(exclude_interactive_browser_credential=False)
+    endpoint="<ENDPOINT_URL>",
+    credential=DefaultAzureCredential(),
+    credential_scopes=["https://cognitiveservices.azure.com/.default"]
 )
-
-response = client.complete(
-    messages=[
-        SystemMessage("You are a helpful assistant."),
-        UserMessage("How many feet are in a mile?"),
-    ]
-)
-print(response.choices[0].message.content)
 ```
 
-## Next Steps
+For more detailed examples and usage, see the [Azure AI Inference SDK documentation](https://aka.ms/aiservices/inference){:target="_blank"} and [Azure OpenAI Service documentation](https://learn.microsoft.com/azure/ai-services/openai/overview){:target="_blank"}.
 
-- Explore the [Azure AI Foundry documentation](https://learn.microsoft.com/azure/ai-foundry/){:target="_blank"}
-- Learn more about [model deployment options](https://learn.microsoft.com/azure/ai-foundry/how-to/model-catalog-overview){:target="_blank"}
-- Review [authentication methods](https://learn.microsoft.com/azure/ai-foundry/how-to/authentication-overview){:target="_blank"}
-- Try the [Azure Inference SDK](https://aka.ms/aiservices/inference){:target="_blank"} and [Azure OpenAI Service SDK](https://learn.microsoft.com/azure/ai-services/openai/overview){:target="_blank"}
+---
+
+**Next steps:**
+
+- [Explore the model catalog in Azure AI Foundry portal](https://learn.microsoft.com/azure/ai-foundry/how-to/model-catalog-overview){:target="_blank"}
+- [Deploy your first model](https://learn.microsoft.com/azure/ai-foundry/how-to/deploy-models-serverless){:target="_blank"}
+- [Get started with the Azure AI Inference SDK](https://aka.ms/aiservices/inference){:target="_blank"}
+- [Learn about authentication in Azure](https://learn.microsoft.com/azure/ai-foundry/how-to/enable-entra-id-authentication){:target="_blank"}

@@ -1,8 +1,8 @@
-# Generate a Sales by Region Pie Chart Using Code Interpreter
+# Generate a Sales by Region Pie Chart Using Code Interpreter in Azure AI Foundry
 
 ## Introduction
 
-This guide shows you how to use the Code Interpreter tool in Azure AI Foundry Agents to generate a pie chart of sales by region from a CSV file. You will create a `sales_data.csv` file with sales data for Europe and China, and then use the Code Interpreter to visualize the data.
+This article demonstrates how to use the Code Interpreter tool in Azure AI Foundry Agents to generate a pie chart of sales by region from a CSV file. You will use a project connection string and Microsoft Entra ID authentication to securely access the Azure AI Foundry project and run the code interpreter tool.
 
 ## Prerequisites
 
@@ -11,11 +11,17 @@ This guide shows you how to use the Code Interpreter tool in Azure AI Foundry Ag
 
 ## 1. Authentication
 
-Azure AI Foundry provides secure access to AI services and tools, including the Code Interpreter. You will need to authenticate using your Azure AI Foundry project connection string and model deployment name.
+This example uses a project connection string and Microsoft Entra ID authentication.
 
-1. Go to the Azure AI Foundry portal.
-2. Select your project and copy the **Project Connection String** from the **Overview** tab.
-3. Find your model deployment name under the **Models + endpoints** tab.
+The **project connection string** is a unique string that allows your application to connect to your Azure AI Foundry project. You can find it in the **Overview** tab of your Azure AI Foundry project in the Azure portal, under **Project details**.
+
+**Microsoft Entra ID authentication** uses your Azure identity to securely access Azure resources. You can authenticate using your Azure account credentials. To use this method, ensure you have the necessary permissions and have signed in using the Azure CLI (`az login`).
+
+**Steps:**
+
+1. Go to the Azure portal and navigate to your Azure AI Foundry project.
+2. Copy the **Project Connection String** from the **Overview** tab.
+3. Ensure you have the Azure CLI installed and run `az login` to authenticate with Microsoft Entra ID.
 
 ## 2. Developer environment setup
 
@@ -26,8 +32,8 @@ Select your preferred operating system:
     1. Open a terminal (PowerShell).
     2. Create a project folder:
         ```powershell
-        mkdir code-interpreter-sales
-        cd code-interpreter-sales
+        mkdir sales-pie-chart
+        cd sales-pie-chart
         ```
     3. Set up a virtual environment:
         ```powershell
@@ -35,7 +41,7 @@ Select your preferred operating system:
         ```
     4. Activate the virtual environment:
         ```powershell
-        .venv\Scripts\Activate
+        .\.venv\Scripts\Activate
         ```
     5. Install the required libraries:
         ```powershell
@@ -43,8 +49,8 @@ Select your preferred operating system:
         ```
     6. Set up environment variables. Replace the placeholders with the actual values:
         ```powershell
-        $env:PROJECT_CONNECTION_STRING="<your-project-connection-string>"
-        $env:MODEL_DEPLOYMENT_NAME="<your-model-deployment-name>"
+        $env:PROJECT_CONNECTION_STRING = "<your-project-connection-string>"
+        $env:MODEL_DEPLOYMENT_NAME = "<your-model-deployment-name>"
         ```
 
 === "Linux/macOS"
@@ -52,8 +58,8 @@ Select your preferred operating system:
     1. Open a terminal.
     2. Create a project folder:
         ```bash
-        mkdir code-interpreter-sales
-        cd code-interpreter-sales
+        mkdir sales-pie-chart
+        cd sales-pie-chart
         ```
     3. Set up a virtual environment:
         ```bash
@@ -73,7 +79,7 @@ Select your preferred operating system:
         export MODEL_DEPLOYMENT_NAME="<your-model-deployment-name>"
         ```
 
-## 3. Prepare the sales data CSV file
+## 3. Prepare the sales data file
 
 Create a file named `sales_data.csv` in your project folder with the following content:
 
@@ -83,22 +89,25 @@ Europe,120000
 China,150000
 ```
 
-## 4. Main code components
+## 4. Code Sample
 
-### 4.1 Import required libraries
+This code sample demonstrates how to use the Code Interpreter tool in Azure AI Foundry Agents to generate a pie chart from the sales data.
 
-This section imports the necessary libraries for working with Azure AI Projects and authentication.
+### Main code components
+
+#### Import required libraries
+
+This section imports the necessary Python libraries for authentication and interaction with Azure AI Foundry.
 
 ```python
 import os
-
 from azure.ai.projects import AIProjectClient
-from azure.ai.projects.models import CodeInterpreterTool
-from azure.ai.projects.models import FilePurpose
+from azure.ai.projects.models import CodeInterpreterTool, FilePurpose
 from azure.identity import DefaultAzureCredential
+from pathlib import Path
 ```
 
-### 4.2 Upload the sales data file
+#### Upload the sales data file
 
 This code uploads the `sales_data.csv` file to your Azure AI Foundry project for use with the Code Interpreter.
 
@@ -116,78 +125,79 @@ with project_client:
     print(f"Uploaded file, file ID: {file.id}")
 ```
 
-### 4.3 Create an agent with the Code Interpreter tool
+#### Create an agent with the Code Interpreter tool
 
-This code creates an agent that can use the Code Interpreter tool and access the uploaded file.
+This code creates an agent with the Code Interpreter tool, referencing the uploaded file.
 
 ```python
-from azure.ai.projects.models import CodeInterpreterTool
+    code_interpreter = CodeInterpreterTool(file_ids=[file.id])
 
-code_interpreter = CodeInterpreterTool(file_ids=[file.id])
-
-agent = project_client.agents.create_agent(
-    model=os.environ["MODEL_DEPLOYMENT_NAME"],
-    name="sales-analyst",
-    instructions="You are a helpful assistant that analyzes sales data.",
-    tools=code_interpreter.definitions,
-    tool_resources=code_interpreter.resources,
-)
-print(f"Created agent, agent ID: {agent.id}")
+    agent = project_client.agents.create_agent(
+        model=os.environ["MODEL_DEPLOYMENT_NAME"],
+        name="sales-pie-chart-agent",
+        instructions="You are a helpful assistant that generates charts from data.",
+        tools=code_interpreter.definitions,
+        tool_resources=code_interpreter.resources,
+    )
+    print(f"Created agent, agent ID: {agent.id}")
 ```
 
-### 4.4 Create a thread and request a pie chart
+#### Create a thread and message to request the pie chart
 
-This code creates a conversation thread and sends a message to the agent, asking for a pie chart of sales by region.
+This code creates a thread and sends a message to the agent, instructing it to generate a pie chart.
 
 ```python
-thread = project_client.agents.create_thread()
-print(f"Created thread, thread ID: {thread.id}")
+    thread = project_client.agents.create_thread()
+    print(f"Created thread, thread ID: {thread.id}")
 
-message = project_client.agents.create_message(
-    thread_id=thread.id,
-    role="user",
-    content="Generate a pie chart of sales by region using the uploaded sales_data.csv file."
-)
-print(f"Created message, message ID: {message.id}")
-
-run = project_client.agents.create_and_process_run(thread_id=thread.id, agent_id=agent.id)
-print(f"Run finished with status: {run.status}")
+    message = project_client.agents.create_message(
+        thread_id=thread.id,
+        role="user",
+        content="Generate a pie chart of sales by region using the sales_data.csv file."
+    )
+    print(f"Created message, message ID: {message.id}")
 ```
 
-### 4.5 Download and view the generated chart
+#### Run the agent and save the generated chart
 
-This code retrieves the messages and downloads any generated image files (such as the pie chart).
+This code runs the agent, retrieves the generated chart, and saves it locally.
 
 ```python
-from pathlib import Path
+    run = project_client.agents.create_and_process_run(thread_id=thread.id, agent_id=agent.id)
+    print(f"Run finished with status: {run.status}")
 
-messages = project_client.agents.list_messages(thread_id=thread.id)
-for image_content in messages.image_contents:
-    file_id = image_content.image_file.file_id
-    file_name = f"{file_id}_sales_pie_chart.png"
-    project_client.agents.save_file(file_id=file_id, file_name=file_name)
-    print(f"Saved pie chart image to: {Path.cwd() / file_name}")
+    messages = project_client.agents.list_messages(thread_id=thread.id)
+    for image_content in messages.image_contents:
+        file_id = image_content.image_file.file_id
+        file_name = f"{file_id}_sales_pie_chart.png"
+        project_client.agents.save_file(file_id=file_id, file_name=file_name)
+        print(f"Saved pie chart image to: {Path.cwd() / file_name}")
+
+    project_client.agents.delete_agent(agent.id)
+    print("Deleted agent")
 ```
 
 ## 5. Complete code example
 
-The following script combines all the steps above. Save this as `example.py` in your project folder.
+The following is the complete code example. Save this as `example.py` in your project folder.
 
 ```python
 """
 Generate a sales by region pie chart using the Code Interpreter tool in Azure AI Foundry Agents.
-This script uploads a CSV file, creates an agent with the Code Interpreter, and requests a pie chart.
+This script uploads a CSV file, creates an agent with the Code Interpreter, and generates a pie chart.
 """
 
 import os
-from pathlib import Path
-
 from azure.ai.projects import AIProjectClient
 from azure.ai.projects.models import CodeInterpreterTool, FilePurpose
 from azure.identity import DefaultAzureCredential
+from pathlib import Path
 
 def main():
-    # Authenticate and create the project client
+    """
+    Main function to upload sales data, create an agent with the Code Interpreter tool,
+    and generate a pie chart of sales by region.
+    """
     project_client = AIProjectClient.from_connection_string(
         credential=DefaultAzureCredential(),
         conn_str=os.environ["PROJECT_CONNECTION_STRING"]
@@ -207,28 +217,29 @@ def main():
         # Create the agent
         agent = project_client.agents.create_agent(
             model=os.environ["MODEL_DEPLOYMENT_NAME"],
-            name="sales-analyst",
-            instructions="You are a helpful assistant that analyzes sales data.",
+            name="sales-pie-chart-agent",
+            instructions="You are a helpful assistant that generates charts from data.",
             tools=code_interpreter.definitions,
             tool_resources=code_interpreter.resources,
         )
         print(f"Created agent, agent ID: {agent.id}")
 
-        # Create a thread and send the analysis request
+        # Create a thread and message
         thread = project_client.agents.create_thread()
         print(f"Created thread, thread ID: {thread.id}")
 
         message = project_client.agents.create_message(
             thread_id=thread.id,
             role="user",
-            content="Generate a pie chart of sales by region using the uploaded sales_data.csv file."
+            content="Generate a pie chart of sales by region using the sales_data.csv file."
         )
         print(f"Created message, message ID: {message.id}")
 
+        # Run the agent
         run = project_client.agents.create_and_process_run(thread_id=thread.id, agent_id=agent.id)
         print(f"Run finished with status: {run.status}")
 
-        # Download the generated pie chart image
+        # Retrieve and save the generated chart
         messages = project_client.agents.list_messages(thread_id=thread.id)
         for image_content in messages.image_contents:
             file_id = image_content.image_file.file_id
@@ -236,26 +247,29 @@ def main():
             project_client.agents.save_file(file_id=file_id, file_name=file_name)
             print(f"Saved pie chart image to: {Path.cwd() / file_name}")
 
+        # Clean up
+        project_client.agents.delete_agent(agent.id)
+        print("Deleted agent")
+
 if __name__ == "__main__":
     main()
 ```
 
-This script uploads your sales data, creates an agent with the Code Interpreter, and requests a pie chart. The generated image will be saved in your project folder.
-
 ## 6. How to run the example code
 
-1. Ensure you have created the `sales_data.csv` file as described above.
-2. Set the required environment variables for your Azure AI Foundry project and model deployment.
+1. Ensure you have created the `sales_data.csv` file in your project folder.
+2. Set the required environment variables as described in the developer environment setup.
 3. Run the script:
 
     ```bash
     python example.py
     ```
 
-4. After the script completes, look for the generated pie chart image in your project folder.
+4. After the script completes, the generated pie chart image will be saved in your project folder.
 
 ## Next steps
 
 - Learn more about [Azure AI Foundry Agents](https://learn.microsoft.com/azure/ai-studio/concepts/agents-overview){:target="_blank"}
 - Explore [Code Interpreter tool documentation](https://learn.microsoft.com/azure/ai-studio/concepts/agents-code-interpreter){:target="_blank"}
-- Review [Azure AI Foundry model catalog](https://learn.microsoft.com/azure/ai-studio/how-to/model-catalog-overview){:target="_blank"}
+- Review [Azure AI Foundry authentication options](https://learn.microsoft.com/azure/ai-studio/concepts/authentication){:target="_blank"}
+- See more [Azure AI Foundry code samples](https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/ai/azure-ai-projects/samples){:target="_blank"}

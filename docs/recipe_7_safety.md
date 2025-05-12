@@ -1,8 +1,8 @@
-# Add Safety Elements After Evaluation in Azure AI Evaluation
+# Add Safety Elements After Evaluation with Azure AI Evaluation
 
 ## Introduction
 
-After evaluating AI model outputs, you may want to add additional safety elements to ensure responsible and secure AI usage. This document explains how to add safety elements such as prompt shields, groundedness checks, custom categories, and text moderation using the Azure AI Evaluation library. The goal is to help you enhance the safety of your AI solutions by applying these techniques after the initial evaluation phase.
+This article demonstrates how to add safety elements after evaluating AI model outputs using the Azure AI Evaluation library. You will learn how to apply prompt shields, groundedness checks, custom safety categories, and text moderation to your evaluation workflow. The goal is to help you ensure that your AI model outputs are safe, relevant, and aligned with your requirements.
 
 ## Prerequisites
 
@@ -11,23 +11,29 @@ After evaluating AI model outputs, you may want to add additional safety element
 
 ## 1. Authentication
 
-Azure AI Foundry provides access to evaluation and safety services. You can authenticate using Azure credentials.
+Azure AI Evaluation supports authentication using a project connection string and Microsoft Entra ID.
+
+- **Project Connection String**: This string connects your code to a specific Azure AI Foundry project. You can find it in the Azure AI Foundry portal by selecting your project and copying the value from the **Overview** tab under **Project details**.
+- **Microsoft Entra ID Authentication**: This method uses your Azure identity to securely access Azure resources. You typically authenticate by running `az login` with the Azure CLI, which allows your code to use your credentials.
+
+To use these methods:
 
 1. Go to the Azure AI Foundry portal.
-2. Obtain your Azure subscription, resource group, and project name.
-3. Use `DefaultAzureCredential` for authentication in your code.
+2. Select your project.
+3. Copy the **Project Connection String** from the **Overview** tab.
+4. Ensure you have the Azure CLI installed and run `az login` to authenticate with Microsoft Entra ID.
 
 ## 2. Developer environment setup
 
-Select your preferred operating system.
+Select your preferred operating system:
 
 === "Windows (PowerShell)"
 
-    1. Open a terminal.
+    1. Open a terminal (PowerShell).
     2. Create a project folder:
         ```powershell
-        mkdir ai-eval-safety
-        cd ai-eval-safety
+        mkdir ai-evaluation-safety
+        cd ai-evaluation-safety
         ```
     3. Set up a virtual environment:
         ```powershell
@@ -35,14 +41,15 @@ Select your preferred operating system.
         ```
     4. Activate the virtual environment:
         ```powershell
-        .venv\Scripts\Activate
+        .\.venv\Scripts\Activate
         ```
     5. Install the required libraries:
         ```powershell
         pip install azure-ai-evaluation==1.5.0 azure-identity==1.21.0
         ```
-    6. Set up environment variables. Replace the placeholders with the actual values:
+    6. Set up environment variables (replace the placeholders with the actual values):
         ```powershell
+        $env:PROJECT_CONNECTION_STRING="<your-project-connection-string>"
         $env:AZURE_SUBSCRIPTION_ID="<your-subscription-id>"
         $env:AZURE_RESOURCE_GROUP_NAME="<your-resource-group>"
         $env:AZURE_PROJECT_NAME="<your-project-name>"
@@ -53,8 +60,8 @@ Select your preferred operating system.
     1. Open a terminal.
     2. Create a project folder:
         ```bash
-        mkdir ai-eval-safety
-        cd ai-eval-safety
+        mkdir ai-evaluation-safety
+        cd ai-evaluation-safety
         ```
     3. Set up a virtual environment:
         ```bash
@@ -68,143 +75,145 @@ Select your preferred operating system.
         ```bash
         pip install azure-ai-evaluation==1.5.0 azure-identity==1.21.0
         ```
-    6. Set up environment variables. Replace the placeholders with the actual values:
+    6. Set up environment variables (replace the placeholders with the actual values):
         ```bash
+        export PROJECT_CONNECTION_STRING="<your-project-connection-string>"
         export AZURE_SUBSCRIPTION_ID="<your-subscription-id>"
         export AZURE_RESOURCE_GROUP_NAME="<your-resource-group>"
         export AZURE_PROJECT_NAME="<your-project-name>"
         ```
 
+Replace the placeholders with the actual values from your Azure AI Foundry project.
+
 ## 3. Main code components
 
-Below are examples of how to add safety elements after evaluation.
+This section explains how to add safety elements after evaluation using the Azure AI Evaluation library.
 
-### 3.1 Prompt Shields
+### 3.1. Imports and Authentication
 
-Prompt shields help detect and block potentially harmful or unsafe prompts before they reach the model. You can use the `ContentSafetyEvaluator` to screen prompts.
+You will use the Azure AI Evaluation and Azure Identity libraries to authenticate and access your project.
 
 ```python
 import os
 
-from azure.ai.evaluation import ContentSafetyEvaluator
+from azure.ai.evaluation import (
+    ContentSafetyEvaluator,
+    GroundednessEvaluator,
+    CustomCategoryEvaluator,
+    TextModerationEvaluator
+)
 from azure.identity import DefaultAzureCredential
+```
 
-# Set up Azure AI project details
+### 3.2. Set Up Project and Credentials
+
+Set up your Azure AI project and credentials using environment variables.
+
+```python
 azure_ai_project = {
     "subscription_id": os.environ["AZURE_SUBSCRIPTION_ID"],
     "resource_group_name": os.environ["AZURE_RESOURCE_GROUP_NAME"],
     "project_name": os.environ["AZURE_PROJECT_NAME"],
 }
 credential = DefaultAzureCredential()
-
-# Initialize the content safety evaluator
-prompt_shield = ContentSafetyEvaluator(azure_ai_project=azure_ai_project, credential=credential)
-
-# Example prompt to check
-prompt = "How can I make a dangerous substance at home?"
-
-# Evaluate the prompt for safety
-result = prompt_shield(query=prompt, response="")
-print("Prompt shield result:", result)
 ```
 
-### 3.2 Groundedness
+### 3.3. Prompt Shields
 
-Groundedness checks ensure that the model's response is based on provided context or source material. Use the `GroundednessEvaluator` for this purpose.
+Prompt shields help detect and block potentially harmful or unsafe prompts before they reach your model.
 
 ```python
-from azure.ai.evaluation import GroundednessEvaluator
+# Example: Use ContentSafetyEvaluator as a prompt shield
+prompt_shield = ContentSafetyEvaluator(
+    azure_ai_project=azure_ai_project,
+    credential=credential
+)
 
-# Example context and response
-context = "The capital of France is Paris."
-response = "Paris is the capital of France."
-
-# Initialize the groundedness evaluator (model_config can be customized as needed)
-model_config = {
-    "azure_endpoint": "<your-endpoint>",
-    "api_key": "<your-api-key>",
-    "azure_deployment": "<your-deployment-name>",
-}
-groundedness_evaluator = GroundednessEvaluator(model_config=model_config)
-
-# Evaluate groundedness
-groundedness_result = groundedness_evaluator(response=response, context=context)
-print("Groundedness result:", groundedness_result)
+result = prompt_shield(query="Write a story about violence.", response="Once upon a time...")
+print("Prompt Shield Result:", result)
 ```
 
-### 3.3 Custom Categories
+### 3.4. Groundedness
 
-You can define custom categories for moderation by extending the evaluation logic. For example, you might want to flag responses containing specific keywords.
+Groundedness checks ensure that the model's response is based on provided context or source data.
 
 ```python
-def custom_category_check(text, keywords):
-    """
-    Checks if any keyword from the list is present in the text.
-    """
-    for keyword in keywords:
-        if keyword.lower() in text.lower():
-            return True
-    return False
-
-# Example usage
-response = "This is a confidential document."
-custom_keywords = ["confidential", "secret", "classified"]
-
-if custom_category_check(response, custom_keywords):
-    print("Custom category violation detected.")
-else:
-    print("No custom category violation.")
+# Example: Use GroundednessEvaluator to check if the response is grounded in the context
+groundedness_evaluator = GroundednessEvaluator(
+    model_config={"azure_endpoint": "<your-endpoint>", "api_key": "<your-key>", "azure_deployment": "<your-deployment>"}
+)
+groundedness_result = groundedness_evaluator(
+    response="Paris is the capital of France.",
+    context="France, a country in Western Europe, has Paris as its capital."
+)
+print("Groundedness Result:", groundedness_result)
 ```
 
-### 3.4 Text Moderation
+### 3.5. Custom Categories
 
-Text moderation can be performed using the `ContentSafetyEvaluator` or by integrating with Azure AI Content Safety for more advanced scenarios.
+You can define custom categories to flag or filter content based on your organization's needs.
 
 ```python
-from azure.ai.evaluation import ContentSafetyEvaluator
-
-# Reuse the ContentSafetyEvaluator from earlier
-text_to_moderate = "I hate this group of people."
-
-moderation_result = prompt_shield(query="", response=text_to_moderate)
-print("Text moderation result:", moderation_result)
+# Example: Use CustomCategoryEvaluator for a custom category
+custom_category_evaluator = CustomCategoryEvaluator(
+    azure_ai_project=azure_ai_project,
+    credential=credential,
+    categories=["politics", "medical"]
+)
+custom_category_result = custom_category_evaluator(
+    query="Tell me about the latest political news.",
+    response="The election results were announced today."
+)
+print("Custom Category Result:", custom_category_result)
 ```
 
-## 4. Complete code example
+### 3.6. Text Moderation
 
-The following example demonstrates how to combine all the above safety elements after evaluation.
+Text moderation helps detect and filter out inappropriate or unsafe content in model outputs.
+
+```python
+# Example: Use TextModerationEvaluator to moderate text
+text_moderation_evaluator = TextModerationEvaluator(
+    azure_ai_project=azure_ai_project,
+    credential=credential
+)
+moderation_result = text_moderation_evaluator(
+    query="What is the capital of France?",
+    response="Paris is the capital of France."
+)
+print("Text Moderation Result:", moderation_result)
+```
+
+## 4. Complete code
+
+The following example demonstrates how to add all safety elements after evaluation. Save this code as `add_safety_elements.py`.
 
 ```python
 """
-Module: ai_eval_safety.py
+Demonstrates how to add safety elements after evaluation using Azure AI Evaluation.
+Includes prompt shields, groundedness, custom categories, and text moderation.
 
-This module demonstrates how to add safety elements after evaluation using Azure AI Evaluation.
-It covers prompt shields, groundedness, custom categories, and text moderation.
+Set the following environment variables before running:
+- PROJECT_CONNECTION_STRING
+- AZURE_SUBSCRIPTION_ID
+- AZURE_RESOURCE_GROUP_NAME
+- AZURE_PROJECT_NAME
 """
 
 import os
 
-from azure.ai.evaluation import ContentSafetyEvaluator, GroundednessEvaluator
+from azure.ai.evaluation import (
+    ContentSafetyEvaluator,
+    GroundednessEvaluator,
+    CustomCategoryEvaluator,
+    TextModerationEvaluator
+)
 from azure.identity import DefaultAzureCredential
-
-def custom_category_check(text, keywords):
-    """
-    Checks if any keyword from the list is present in the text.
-
-    :param text: The text to check.
-    :param keywords: List of keywords to flag.
-    :return: True if a keyword is found, False otherwise.
-    """
-    for keyword in keywords:
-        if keyword.lower() in text.lower():
-            return True
-    return False
 
 def main():
     """
-    Main function to demonstrate adding safety elements after evaluation.
+    Run safety evaluations on AI model outputs using various evaluators.
     """
-    # Set up Azure AI project details
     azure_ai_project = {
         "subscription_id": os.environ["AZURE_SUBSCRIPTION_ID"],
         "resource_group_name": os.environ["AZURE_RESOURCE_GROUP_NAME"],
@@ -212,57 +221,72 @@ def main():
     }
     credential = DefaultAzureCredential()
 
-    # Prompt shield example
-    prompt_shield = ContentSafetyEvaluator(azure_ai_project=azure_ai_project, credential=credential)
-    prompt = "How can I make a dangerous substance at home?"
-    prompt_shield_result = prompt_shield(query=prompt, response="")
-    print("Prompt shield result:", prompt_shield_result)
+    # Prompt Shield
+    prompt_shield = ContentSafetyEvaluator(
+        azure_ai_project=azure_ai_project,
+        credential=credential
+    )
+    prompt_shield_result = prompt_shield(
+        query="Write a story about violence.",
+        response="Once upon a time..."
+    )
+    print("Prompt Shield Result:", prompt_shield_result)
 
-    # Groundedness example
-    model_config = {
-        "azure_endpoint": "<your-endpoint>",
-        "api_key": "<your-api-key>",
-        "azure_deployment": "<your-deployment-name>",
-    }
-    groundedness_evaluator = GroundednessEvaluator(model_config=model_config)
-    context = "The capital of France is Paris."
-    response = "Paris is the capital of France."
-    groundedness_result = groundedness_evaluator(response=response, context=context)
-    print("Groundedness result:", groundedness_result)
+    # Groundedness
+    groundedness_evaluator = GroundednessEvaluator(
+        model_config={
+            "azure_endpoint": "<your-endpoint>",
+            "api_key": "<your-key>",
+            "azure_deployment": "<your-deployment>"
+        }
+    )
+    groundedness_result = groundedness_evaluator(
+        response="Paris is the capital of France.",
+        context="France, a country in Western Europe, has Paris as its capital."
+    )
+    print("Groundedness Result:", groundedness_result)
 
-    # Custom category example
-    custom_keywords = ["confidential", "secret", "classified"]
-    response_text = "This is a confidential document."
-    if custom_category_check(response_text, custom_keywords):
-        print("Custom category violation detected.")
-    else:
-        print("No custom category violation.")
+    # Custom Categories
+    custom_category_evaluator = CustomCategoryEvaluator(
+        azure_ai_project=azure_ai_project,
+        credential=credential,
+        categories=["politics", "medical"]
+    )
+    custom_category_result = custom_category_evaluator(
+        query="Tell me about the latest political news.",
+        response="The election results were announced today."
+    )
+    print("Custom Category Result:", custom_category_result)
 
-    # Text moderation example
-    text_to_moderate = "I hate this group of people."
-    moderation_result = prompt_shield(query="", response=text_to_moderate)
-    print("Text moderation result:", moderation_result)
+    # Text Moderation
+    text_moderation_evaluator = TextModerationEvaluator(
+        azure_ai_project=azure_ai_project,
+        credential=credential
+    )
+    moderation_result = text_moderation_evaluator(
+        query="What is the capital of France?",
+        response="Paris is the capital of France."
+    )
+    print("Text Moderation Result:", moderation_result)
 
 if __name__ == "__main__":
     main()
 ```
 
-Save this code as `ai_eval_safety.py`.
-
 ## 5. How to run the example code
 
 1. Ensure your environment variables are set as described in the developer environment setup.
-2. Run the script:
+2. Save the complete code as `add_safety_elements.py`.
+3. Run the script:
 
     ```bash
-    python ai_eval_safety.py
+    python add_safety_elements.py
     ```
 
 ## 6. Next steps
 
-- [Azure AI Evaluation documentation](https://learn.microsoft.com/azure/ai-studio/evaluation/overview){:target="_blank"}
-- [Azure AI Content Safety documentation](https://learn.microsoft.com/azure/ai-services/content-safety/overview){:target="_blank"}
-- [Responsible AI in Azure](https://learn.microsoft.com/azure/ai-services/responsible-ai){:target="_blank"}
-- [Azure AI Foundry documentation](https://learn.microsoft.com/azure/ai-foundry/){:target="_blank"}
-
-By adding these safety elements after evaluation, you can help ensure your AI solutions are more secure, responsible, and aligned with your organizational requirements.
+- [Azure AI Evaluation documentation](https://aka.ms/azure-ai-evaluation-docs){:target="_blank"}
+- [Azure AI Foundry documentation](https://learn.microsoft.com/azure/ai-studio/){:target="_blank"}
+- [Content Safety in Azure AI](https://learn.microsoft.com/azure/ai-services/content-safety/overview){:target="_blank"}
+- [Azure Identity authentication](https://learn.microsoft.com/azure/developer/python/sdk/identity/){:target="_blank"}
+- [Azure AI Evaluation samples](https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/evaluation/azure-ai-evaluation/samples){:target="_blank"}

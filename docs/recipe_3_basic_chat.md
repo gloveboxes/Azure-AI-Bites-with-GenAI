@@ -2,33 +2,37 @@
 
 ## Introduction
 
-This article demonstrates how to perform a basic chat completion using the Azure AI Inference SDK for Python. You will learn how to authenticate with a key, create a chat client, and use `SystemMessage`, `UserMessage`, and `AssistantMessage` to interact with an AI model deployed via Azure AI Foundry.
+This article demonstrates how to perform a basic chat completion using the Azure AI Inference SDK in Python. You will learn how to authenticate using a key and endpoint, and how to use different message types such as `SystemMessage`, `UserMessage`, and `AssistantMessage` to interact with an AI model deployed in Azure AI Foundry.
 
 ## Prerequisites
 
 - Python 3.8 or later
-- Access to Azure AI Foundry services with a deployed model endpoint and API key
+- Access to Azure AI Foundry services with a deployed model
 
 ## 1. Authentication
 
-Azure AI Foundry provides secure access to deployed AI models using key authentication. You will need your model's endpoint URL and API key, which can be found in the Azure AI Foundry portal under your deployment's **SDK** section.
+This example uses the Azure AI Inference SDK and Key Authentication.
 
-1. Go to your Azure AI Foundry deployment in the portal.
-2. Select **Azure Inference SDK** from the SDK dropdown.
-3. Choose **Key Authentication** as the authentication type.
-4. Copy the **Key** and **Endpoint** values for use in your application.
+Key Authentication requires an endpoint URL and an API key. The endpoint is the URL of your deployed model in Azure AI Foundry. The API key is a secret used to authenticate your requests.
+
+To obtain your endpoint and key:
+
+1. Go to the Azure AI Foundry portal.
+2. Select your model deployment.
+3. From the **SDK** dropdown, select **Azure Inference SDK**.
+4. Under **Authentication type**, select **Key Authentication**.
+5. Copy the **Endpoint** and **Key** values.
 
 ## 2. Developer environment setup
 
 Select your preferred operating system:
 
 === "Windows (PowerShell)"
-
     1. Open a terminal (PowerShell).
     2. Create a project folder:
         ```powershell
-        mkdir azure-ai-chat-demo
-        cd azure-ai-chat-demo
+        mkdir azure-ai-chat-sample
+        cd azure-ai-chat-sample
         ```
     3. Set up a virtual environment:
         ```powershell
@@ -36,7 +40,7 @@ Select your preferred operating system:
         ```
     4. Activate the virtual environment:
         ```powershell
-        .\.venv\Scripts\Activate
+        .venv\Scripts\Activate
         ```
     5. Install the required libraries:
         ```powershell
@@ -49,12 +53,11 @@ Select your preferred operating system:
         ```
 
 === "Linux/macOS"
-
     1. Open a terminal.
     2. Create a project folder:
         ```bash
-        mkdir azure-ai-chat-demo
-        cd azure-ai-chat-demo
+        mkdir azure-ai-chat-sample
+        cd azure-ai-chat-sample
         ```
     3. Set up a virtual environment:
         ```bash
@@ -88,9 +91,9 @@ from azure.ai.inference.models import SystemMessage, UserMessage, AssistantMessa
 from azure.core.credentials import AzureKeyCredential
 ```
 
-### Set up authentication and client
+### Set up the client
 
-This code retrieves the endpoint and key from environment variables and creates a chat completions client using key authentication.
+This code retrieves the endpoint and key from environment variables and creates a `ChatCompletionsClient` for interacting with the Azure AI model.
 
 ```python
 endpoint = os.environ["AZURE_AI_INFERENCE_ENDPOINT"]
@@ -102,7 +105,7 @@ client = ChatCompletionsClient(
 )
 ```
 
-### Create and send chat messages
+### Compose chat messages
 
 This code demonstrates how to use `SystemMessage`, `UserMessage`, and `AssistantMessage` to structure a conversation.
 
@@ -113,29 +116,27 @@ messages = [
     AssistantMessage("There are 5,280 feet in a mile. How else can I help you?"),
     UserMessage("What is the capital of France?")
 ]
-
-response = client.complete(messages=messages)
 ```
 
-### Print the response
+### Send the chat completion request
 
-This code prints the assistant's reply and token usage.
+This code sends the messages to the model and prints the response.
 
 ```python
-print("Assistant:", response.choices[0].message.content)
-print("Token usage:", response.usage)
+response = client.complete(messages=messages)
+print(response.choices[0].message.content)
 ```
 
 ## 4. Complete code example
 
-The following is the complete example. Save this code as `example.py`.
+The following is the complete code sample. Save this as `example.py`.
 
 ```python
 """
-Basic chat completion using Azure AI Inference SDK with key authentication.
+Basic chat completion using Azure AI Inference SDK and Key Authentication.
 
 This script demonstrates how to use SystemMessage, UserMessage, and AssistantMessage
-to interact with an AI model deployed via Azure AI Foundry.
+to interact with an AI model deployed in Azure AI Foundry.
 """
 
 import os
@@ -148,17 +149,14 @@ def main():
     """
     Run a basic chat completion using Azure AI Inference SDK.
     """
-    # Retrieve endpoint and key from environment variables
     endpoint = os.environ["AZURE_AI_INFERENCE_ENDPOINT"]
     key = os.environ["AZURE_AI_INFERENCE_KEY"]
 
-    # Create the chat completions client
     client = ChatCompletionsClient(
         endpoint=endpoint,
         credential=AzureKeyCredential(key)
     )
 
-    # Define the conversation messages
     messages = [
         SystemMessage("You are a helpful assistant."),
         UserMessage("How many feet are in a mile?"),
@@ -166,12 +164,8 @@ def main():
         UserMessage("What is the capital of France?")
     ]
 
-    # Get the chat completion response
     response = client.complete(messages=messages)
-
-    # Print the assistant's reply and token usage
-    print("Assistant:", response.choices[0].message.content)
-    print("Token usage:", response.usage)
+    print(response.choices[0].message.content)
 
 if __name__ == "__main__":
     main()
@@ -179,26 +173,15 @@ if __name__ == "__main__":
 
 ## 5. How to run the example code
 
-1. Ensure your virtual environment is activated and environment variables are set.
+1. Ensure your environment variables are set as described in the setup section.
 2. Run the script:
-
     ```bash
     python example.py
     ```
 
-You should see the assistant's response to the last user message and token usage information.
-
 ## 6. Next steps
 
-- Explore more chat completion features in the [Azure AI Inference SDK documentation](https://aka.ms/aiservices/inference){:target="_blank"}.
-- Review additional [Python samples](https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/ai/azure-ai-inference/samples){:target="_blank"}.
-- Learn about [message types](https://aka.ms/azsdk/azure-ai-inference/python/reference){:target="_blank"} and advanced conversation patterns.
-- For troubleshooting, see [Configure logging in the Azure libraries for Python](https://aka.ms/azsdk/python/logging){:target="_blank"}.
-
----
-
-**Related resources:**
-
-- [Azure AI Foundry documentation](https://learn.microsoft.com/azure/ai-foundry/){:target="_blank"}
-- [Azure AI Inference SDK API reference](https://aka.ms/azsdk/azure-ai-inference/python/reference){:target="_blank"}
-- [Azure AI Inference SDK samples](https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/ai/azure-ai-inference/samples){:target="_blank"}
+- Learn more about [Azure AI Inference client library for Python](https://aka.ms/aiservices/inference){:target="_blank"}
+- Explore [Azure AI Foundry documentation](https://learn.microsoft.com/azure/ai-studio/){:target="_blank"}
+- Review [API reference documentation](https://aka.ms/azsdk/azure-ai-inference/python/reference){:target="_blank"}
+- See more [Samples](https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/ai/azure-ai-inference/samples){:target="_blank"}

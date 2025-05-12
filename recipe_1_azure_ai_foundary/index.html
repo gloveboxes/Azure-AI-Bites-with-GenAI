@@ -1,0 +1,801 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="..">
+      
+      
+        <link rel="next" href="../recipe_2_getting_started_ai_foundry/">
+      
+      
+      <link rel="icon" href="../media/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.13">
+    
+    
+      
+        <title>Getting started with Azure AI Foundry - Azure AI Bites</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.342714a4.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../css/custom.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+   <link href="../assets/stylesheets/glightbox.min.css" rel="stylesheet"/><style>
+    html.glightbox-open { overflow: initial; height: 100%; }
+    .gslide-title { margin-top: 0px; user-select: text; }
+    .gslide-desc { color: #666; user-select: text; }
+    .gslide-image img { background: white; }
+    .gscrollbar-fixer { padding-right: 15px; }
+    .gdesc-inner { font-size: 0.75rem; }
+    body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color);}
+    body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color);}
+    body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color);}</style> <script src="../assets/javascripts/glightbox.min.js"></script></head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="pink">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#introduction-to-azure-ai-foundry-for-beginners" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Azure AI Bites" class="md-header__button md-logo" aria-label="Azure AI Bites" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Azure AI Bites
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Getting started with Azure AI Foundry
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="pink"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 2c-1.82 0-3.53.5-5 1.35C8 5.08 10 8.3 10 12s-2 6.92-5 8.65C6.47 21.5 8.18 22 10 22a10 10 0 0 0 10-10A10 10 0 0 0 10 2"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="amber" data-md-color-accent="cyan"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+    
+  </nav>
+  
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Azure AI Bites" class="md-nav__button md-logo" aria-label="Azure AI Bites" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Azure AI Bites
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Introduction
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Getting started with Azure AI Foundry
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Getting started with Azure AI Foundry
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction-to-azure-ai-foundry-components" class="md-nav__link">
+    <span class="md-ellipsis">
+      Introduction to Azure AI Foundry Components
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ways-to-deploy-models-in-azure-ai-foundry" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ways to Deploy Models in Azure AI Foundry
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#authentication-methods-for-accessing-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      Authentication Methods for Accessing Models
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#where-to-get-authentication-information" class="md-nav__link">
+    <span class="md-ellipsis">
+      Where to Get Authentication Information
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sdks-for-azure-ai-foundry" class="md-nav__link">
+    <span class="md-ellipsis">
+      SDKs for Azure AI Foundry
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#simple-authentication-examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      Simple Authentication Examples
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../recipe_2_getting_started_ai_foundry/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Setting up model deployment in Azure AI Foundry
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../recipe_3_basic_chat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Basic Chat Completion
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../recipe_4_migrating/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Migrate to Azure Inference Chat Completion
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../recipe_5_generate_image/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Generate an Sales by Region Pie Chart
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../recipe_6_evaluations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Evaluate your Agent
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../recipe_7_safety/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Implementing safety systems with Azure AI Content Safety
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction-to-azure-ai-foundry-components" class="md-nav__link">
+    <span class="md-ellipsis">
+      Introduction to Azure AI Foundry Components
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ways-to-deploy-models-in-azure-ai-foundry" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ways to Deploy Models in Azure AI Foundry
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#authentication-methods-for-accessing-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      Authentication Methods for Accessing Models
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#where-to-get-authentication-information" class="md-nav__link">
+    <span class="md-ellipsis">
+      Where to Get Authentication Information
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sdks-for-azure-ai-foundry" class="md-nav__link">
+    <span class="md-ellipsis">
+      SDKs for Azure AI Foundry
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#simple-authentication-examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      Simple Authentication Examples
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="introduction-to-azure-ai-foundry-for-beginners">Introduction to Azure AI Foundry for Beginners<a class="headerlink" href="#introduction-to-azure-ai-foundry-for-beginners" title="Permanent link">&para;</a></h1>
+<p>Azure AI Foundry is a platform that helps you discover, deploy, and use a wide range of AI models for your applications. It provides a unified experience for working with models from Microsoft, OpenAI, and other leading providers. Azure AI Foundry is designed to make it easy for you to organize your work, manage security, and control access to your AI resources.</p>
+<h2 id="introduction-to-azure-ai-foundry-components">Introduction to Azure AI Foundry Components<a class="headerlink" href="#introduction-to-azure-ai-foundry-components" title="Permanent link">&para;</a></h2>
+<p>Azure AI Foundry is built around several key components that help you manage and use AI models effectively:</p>
+<h3 id="hubs">Hubs<a class="headerlink" href="#hubs" title="Permanent link">&para;</a></h3>
+<p>A <strong>Hub</strong> is a top-level resource in Azure AI Foundry. It acts as a central point for managing security, networking, and access control for your AI resources. Hubs allow you to:</p>
+<ul>
+<li>Organize your AI resources across teams and projects.</li>
+<li>Set up network isolation and security policies.</li>
+<li>Control who can access and manage resources within the hub.</li>
+</ul>
+<h3 id="projects">Projects<a class="headerlink" href="#projects" title="Permanent link">&para;</a></h3>
+<p>A <strong>Project</strong> is a workspace within a hub where you can organize your AI assets, such as models, datasets, and deployments. Projects help you:</p>
+<ul>
+<li>Group related resources for a specific application or team.</li>
+<li>Manage access control at a more granular level.</li>
+<li>Track usage and billing for your AI workloads.</li>
+</ul>
+<p>For more information, see <a href="https://learn.microsoft.com/azure/ai-foundry/how-to/model-catalog-overview" target="_blank">Explore foundation models in Azure AI Foundry portal</a>.</p>
+<h2 id="ways-to-deploy-models-in-azure-ai-foundry">Ways to Deploy Models in Azure AI Foundry<a class="headerlink" href="#ways-to-deploy-models-in-azure-ai-foundry" title="Permanent link">&para;</a></h2>
+<p>Azure AI Foundry offers several deployment options to suit different needs:</p>
+<h3 id="1-serverless-api-pay-as-you-go">1. Serverless API (Pay-As-You-Go)<a class="headerlink" href="#1-serverless-api-pay-as-you-go" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Preferred deployment method</strong> for most users.</li>
+<li>Provides access to a wide range of models from various providers.</li>
+<li>Models are hosted and managed by Microsoft; you only pay for what you use (per token).</li>
+<li>No need to manage infrastructure.</li>
+<li>Fast and easy to get started.</li>
+</ul>
+<p>Learn more: <a href="https://learn.microsoft.com/azure/ai-foundry/how-to/deploy-models-serverless" target="_blank">Deploy models as serverless APIs</a></p>
+<h3 id="2-managed-compute">2. Managed Compute<a class="headerlink" href="#2-managed-compute" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Allows you to deploy models to dedicated virtual machines managed by Azure.</li>
+<li>Often used for leading-edge models or early availability releases.</li>
+<li>Provides more control over compute resources and network isolation.</li>
+<li>Suitable for advanced scenarios or when you need custom configurations.</li>
+</ul>
+<p>Learn more: <a href="https://learn.microsoft.com/azure/ai-foundry/how-to/deploy-models-managed" target="_blank">Deploy models with managed compute</a></p>
+<h3 id="3-azure-openai-service">3. Azure OpenAI Service<a class="headerlink" href="#3-azure-openai-service" title="Permanent link">&para;</a></h3>
+<ul>
+<li>A managed service for OpenAI models (such as GPT-4, GPT-4o, etc.).</li>
+<li>Provides enterprise-grade security, compliance, and support.</li>
+<li>Integrates with Azure AI Foundry for unified management.</li>
+</ul>
+<p>Learn more: <a href="https://learn.microsoft.com/azure/ai-services/openai/overview" target="_blank">What is Azure OpenAI Service?</a></p>
+<h2 id="authentication-methods-for-accessing-models">Authentication Methods for Accessing Models<a class="headerlink" href="#authentication-methods-for-accessing-models" title="Permanent link">&para;</a></h2>
+<p>To use models deployed in Azure AI Foundry, your applications need to authenticate. Azure AI Foundry supports several authentication methods:</p>
+<h3 id="1-project-connection-string">1. Project Connection String<a class="headerlink" href="#1-project-connection-string" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Used to connect to an Azure AI Foundry project.</li>
+<li>The connection string is available in the <strong>Overview</strong> tab of your project in the Azure AI Foundry portal.</li>
+<li>Suitable for SDKs and tools that support project-based authentication.</li>
+</ul>
+<p>Learn more: <a href="https://learn.microsoft.com/azure/ai-foundry/how-to/project-connection-string" target="_blank">Get the project connection string</a></p>
+<h3 id="2-api-key">2. API Key<a class="headerlink" href="#2-api-key" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Used for authenticating directly to a model endpoint.</li>
+<li>API keys are available in the Azure AI Foundry portal under your model deployment's details.</li>
+<li>Commonly used for serverless API and Azure OpenAI Service deployments.</li>
+</ul>
+<p>Learn more: <a href="https://learn.microsoft.com/azure/ai-foundry/how-to/manage-keys" target="_blank">Manage API keys for Azure AI Foundry</a></p>
+<h3 id="3-microsoft-entra-id-formerly-azure-active-directory">3. Microsoft Entra ID (formerly Azure Active Directory)<a class="headerlink" href="#3-microsoft-entra-id-formerly-azure-active-directory" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Provides secure, identity-based authentication for enterprise scenarios.</li>
+<li>Allows you to use role-based access control (RBAC) and integrate with your organization's identity provider.</li>
+<li>To enable Entra ID authentication, configure your deployment to allow it in the Azure AI Foundry portal.</li>
+</ul>
+<p>Learn more: <a href="https://learn.microsoft.com/azure/ai-foundry/how-to/enable-entra-id-authentication" target="_blank">Enable Microsoft Entra ID authentication</a></p>
+<h2 id="where-to-get-authentication-information">Where to Get Authentication Information<a class="headerlink" href="#where-to-get-authentication-information" title="Permanent link">&para;</a></h2>
+<ul>
+<li>
+<p><strong>Project Connection String:</strong><br />
+  Go to your project in the Azure AI Foundry portal. The connection string is shown on the <strong>Overview</strong> tab in the <strong>Project details</strong> section.</p>
+</li>
+<li>
+<p><strong>API Key:</strong><br />
+  Go to your model deployment in the Azure AI Foundry portal. Under the <strong>SDK</strong> dropdown, select your preferred SDK and authentication type to view the key and endpoint.</p>
+</li>
+<li>
+<p><strong>Microsoft Entra ID:</strong><br />
+  Enable Entra ID authentication in your deployment settings in the Azure AI Foundry portal. You may need to configure permissions and assign roles to users or applications.</p>
+</li>
+</ul>
+<h2 id="sdks-for-azure-ai-foundry">SDKs for Azure AI Foundry<a class="headerlink" href="#sdks-for-azure-ai-foundry" title="Permanent link">&para;</a></h2>
+<p>Azure AI Foundry supports several SDKs to help you interact with models and deployments:</p>
+<h3 id="azure-inference-sdk">Azure Inference SDK<a class="headerlink" href="#azure-inference-sdk" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Unified SDK for accessing models deployed via serverless API or managed compute.</li>
+<li>Supports chat completions, embeddings, and more.</li>
+<li>Works with a wide range of models from different providers.</li>
+</ul>
+<p>Learn more: <a href="https://aka.ms/aiservices/inference" target="_blank">Azure AI Inference client library for Python</a></p>
+<h3 id="azure-openai-service-sdk">Azure OpenAI Service SDK<a class="headerlink" href="#azure-openai-service-sdk" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Official SDK for working with Azure OpenAI Service models.</li>
+<li>Provides advanced features and full support for OpenAI models.</li>
+</ul>
+<p>Learn more: <a href="https://learn.microsoft.com/azure/ai-services/openai/quickstart-client-library" target="_blank">Azure OpenAI client library for Python</a></p>
+<h2 id="simple-authentication-examples">Simple Authentication Examples<a class="headerlink" href="#simple-authentication-examples" title="Permanent link">&para;</a></h2>
+<p>Below are very simple Python examples for each authentication method. Replace the placeholders with your actual values.</p>
+<h3 id="1-project-connection-string_1">1. Project Connection String<a class="headerlink" href="#1-project-connection-string_1" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">azure.ai.projects</span><span class="w"> </span><span class="kn">import</span> <span class="n">AIProjectClient</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">azure.identity</span><span class="w"> </span><span class="kn">import</span> <span class="n">DefaultAzureCredential</span>
+
+<span class="n">project_client</span> <span class="o">=</span> <span class="n">AIProjectClient</span><span class="o">.</span><span class="n">from_connection_string</span><span class="p">(</span>
+    <span class="n">credential</span><span class="o">=</span><span class="n">DefaultAzureCredential</span><span class="p">(),</span>
+    <span class="n">conn_str</span><span class="o">=</span><span class="s2">&quot;&lt;PROJECT_CONNECTION_STRING&gt;&quot;</span>
+<span class="p">)</span>
+</code></pre></div>
+<h3 id="2-api-key_1">2. API Key<a class="headerlink" href="#2-api-key_1" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">azure.ai.inference</span><span class="w"> </span><span class="kn">import</span> <span class="n">ChatCompletionsClient</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">azure.core.credentials</span><span class="w"> </span><span class="kn">import</span> <span class="n">AzureKeyCredential</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">ChatCompletionsClient</span><span class="p">(</span>
+    <span class="n">endpoint</span><span class="o">=</span><span class="s2">&quot;&lt;ENDPOINT_URL&gt;&quot;</span><span class="p">,</span>
+    <span class="n">credential</span><span class="o">=</span><span class="n">AzureKeyCredential</span><span class="p">(</span><span class="s2">&quot;&lt;API_KEY&gt;&quot;</span><span class="p">)</span>
+<span class="p">)</span>
+</code></pre></div>
+<h3 id="3-microsoft-entra-id">3. Microsoft Entra ID<a class="headerlink" href="#3-microsoft-entra-id" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">azure.ai.inference</span><span class="w"> </span><span class="kn">import</span> <span class="n">ChatCompletionsClient</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">azure.identity</span><span class="w"> </span><span class="kn">import</span> <span class="n">DefaultAzureCredential</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">ChatCompletionsClient</span><span class="p">(</span>
+    <span class="n">endpoint</span><span class="o">=</span><span class="s2">&quot;&lt;ENDPOINT_URL&gt;&quot;</span><span class="p">,</span>
+    <span class="n">credential</span><span class="o">=</span><span class="n">DefaultAzureCredential</span><span class="p">(),</span>
+    <span class="n">credential_scopes</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;https://cognitiveservices.azure.com/.default&quot;</span><span class="p">]</span>
+<span class="p">)</span>
+</code></pre></div>
+<p>For more detailed examples and usage, see the <a href="https://aka.ms/aiservices/inference" target="_blank">Azure AI Inference SDK documentation</a> and <a href="https://learn.microsoft.com/azure/ai-services/openai/overview" target="_blank">Azure OpenAI Service documentation</a>.</p>
+<hr />
+<p><strong>Next steps:</strong></p>
+<ul>
+<li><a href="https://learn.microsoft.com/azure/ai-foundry/how-to/model-catalog-overview" target="_blank">Explore the model catalog in Azure AI Foundry portal</a></li>
+<li><a href="https://learn.microsoft.com/azure/ai-foundry/how-to/deploy-models-serverless" target="_blank">Deploy your first model</a></li>
+<li><a href="https://aka.ms/aiservices/inference" target="_blank">Get started with the Azure AI Inference SDK</a></li>
+<li><a href="https://learn.microsoft.com/azure/ai-foundry/how-to/enable-entra-id-authentication" target="_blank">Learn about authentication in Azure</a></li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href=".." class="md-footer__link md-footer__link--prev" aria-label="Previous: Introduction">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Introduction
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../recipe_2_getting_started_ai_foundry/" class="md-footer__link md-footer__link--next" aria-label="Next: Setting up model deployment in Azure AI Foundry">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Setting up model deployment in Azure AI Foundry
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.footer", "content.code.copy", "navigation.tabs.sticky", "content.tabs.link"], "search": "../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.13a4f30d.min.js"></script>
+      
+    
+  <script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
+document$.subscribe(() => { lightbox.reload() });
+</script></body>
+</html>
